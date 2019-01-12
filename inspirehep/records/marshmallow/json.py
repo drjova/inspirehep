@@ -9,7 +9,7 @@
 
 from __future__ import absolute_import, print_function
 
-from invenio_records_rest.schemas import Nested, StrictKeysMixin
+from invenio_records_rest.schemas import  StrictKeysMixin
 from invenio_records_rest.schemas.fields import DateString, \
     PersistentIdentifier, SanitizedUnicode
 from marshmallow import fields, missing, validate
@@ -44,7 +44,6 @@ class MetadataSchemaV1(StrictKeysMixin):
     title = SanitizedUnicode(required=True, validate=validate.Length(min=3))
     keywords = fields.List(SanitizedUnicode(), many=True)
     publication_date = DateString()
-    contributors = Nested(ContributorSchemaV1, many=True, required=True)
 
 
 class RecordSchemaV1(StrictKeysMixin):

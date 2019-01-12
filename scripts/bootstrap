@@ -33,6 +33,6 @@ fi
 
 pipenv install ${flags[@]}
 
-
-pipenv run invenio collect -v
-pipenv run invenio webpack buildall
+# remove this shit
+# pipenv run invenio collect -v
+# pipenv run invenio webpack buildall
