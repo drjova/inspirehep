@@ -10,7 +10,6 @@
 
 from __future__ import absolute_import, print_function
 
-from .ext import inspirehep
-from .version import __version__
+from .ext import InspireRecords
 
-__all__ = ('__version__', 'inspirehep')
+__all__ = ('InspireRecords')

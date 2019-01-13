@@ -39,30 +39,6 @@ I18N_LANGUAGES = [
     # ('fr', _('French'))
 ]
 
-# Base templates
-# ==============
-#: Global base template.
-BASE_TEMPLATE = 'invenio_theme/page.html'
-#: Cover page base template (used for e.g. login/sign-up).
-COVER_TEMPLATE = 'invenio_theme/page_cover.html'
-#: Footer base template.
-FOOTER_TEMPLATE = 'invenio_theme/footer.html'
-#: Header base template.
-HEADER_TEMPLATE = 'invenio_theme/header.html'
-#: Settings base template.
-SETTINGS_TEMPLATE = 'invenio_theme/page_settings.html'
-
-# Theme configuration
-# ===================
-#: Site name
-THEME_SITENAME = _('inspirehep')
-#: Use default frontpage.
-THEME_FRONTPAGE = True
-#: Frontpage title.
-THEME_FRONTPAGE_TITLE = _('inspirehep')
-#: Frontpage template.
-THEME_FRONTPAGE_TEMPLATE = 'inspirehep/frontpage.html'
-
 # Email configuration
 # ===================
 #: Email address for support.

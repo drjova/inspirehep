@@ -12,7 +12,7 @@ from __future__ import absolute_import, print_function
 from . import config
 
 
-class inspirehep(object):
+class InspireRecords(object):
     """inspirehep extension."""
 
     def __init__(self, app=None):

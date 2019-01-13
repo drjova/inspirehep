@@ -46,7 +46,7 @@ setup(
             'inspirehep = inspirehep.config',
         ],
         'invenio_base.api_apps': [
-            'inspirehep = inspirehep.records:inspirehep',
+            'inspirehep = inspirehep.records:InspireRecords',
          ],
         'invenio_jsonschemas.schemas': [
             'inspirehep = inspirehep.records.jsonschemas'
