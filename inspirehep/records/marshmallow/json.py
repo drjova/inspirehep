@@ -11,7 +11,7 @@ from __future__ import absolute_import, print_function
 
 from invenio_records_rest.schemas import  StrictKeysMixin
 from invenio_records_rest.schemas.fields import DateString, \
-    PersistentIdentifier, SanitizedUnicode
+    SanitizedUnicode
 from marshmallow import fields, missing, validate
 
 
@@ -25,7 +25,6 @@ class PersonIdsSchemaV1(StrictKeysMixin):
 class ContributorSchemaV1(StrictKeysMixin):
     """Contributor schema."""
 
-    ids = fields.Nested(PersonIdsSchemaV1, many=True)
     name = SanitizedUnicode(required=True)
     role = SanitizedUnicode()
     affiliations = fields.List(SanitizedUnicode())
@@ -40,7 +39,6 @@ class MetadataSchemaV1(StrictKeysMixin):
         pid = self.context.get('pid')
         return pid.pid_value if pid else missing
 
-    lit = PersistentIdentifier()
     title = SanitizedUnicode(required=True, validate=validate.Length(min=3))
     keywords = fields.List(SanitizedUnicode(), many=True)
     publication_date = DateString()
@@ -54,4 +52,3 @@ class RecordSchemaV1(StrictKeysMixin):
     revision = fields.Integer(dump_only=True)
     updated = fields.Str(dump_only=True)
     links = fields.Dict(dump_only=True)
-    id = PersistentIdentifier()

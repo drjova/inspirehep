@@ -16,7 +16,6 @@
 # Check manifest will not automatically add these two files:
 include .dockerignore
 include .editorconfig
-include .tx/config
 include docker/haproxy/Dockerfile
 include docker/nginx/Dockerfile
 include docker/postgres/Dockerfile
@@ -26,6 +25,4 @@ include scripts/console
 include scripts/server
 include scripts/setup
 include scripts/update
-prune docs/_build
-recursive-include inspirehep *.po *.pot *.mo
 recursive-include docker *.cfg *.conf *.crt *.ini *.key *.pem *.sh

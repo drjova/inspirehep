@@ -11,7 +11,7 @@ import os
 
 from setuptools import find_packages, setup
 
-readme = open('README.rst').read()
+readme = open('README.md').read()
 
 INVENIO_VERSION = "3.1.0.dev20181106"
 
@@ -40,21 +40,10 @@ setup(
     platforms='any',
     entry_points={
         'console_scripts': [
-            'inspirehep = invenio_app.cli:cli',
-        ],
-        'invenio_base.apps': [
-            'flask_debugtoolbar = flask_debugtoolbar:DebugToolbarExtension',
-            'inspirehep_records = inspirehep.records:inspirehep',
-        ],
-        'invenio_base.blueprints': [
-            'inspirehep = inspirehep.theme.views:blueprint',
-            'inspirehep_records = inspirehep.records.views:blueprint',
+            'inspirehep = inspirehep.cli:cli',
         ],
         'invenio_config.module': [
             'inspirehep = inspirehep.config',
-        ],
-        'invenio_i18n.translations': [
-            'messages = inspirehep',
         ],
         'invenio_base.api_apps': [
             'inspirehep = inspirehep.records:inspirehep',

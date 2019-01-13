@@ -5,10 +5,9 @@
 # inspirehep is free software; you can redistribute it and/or modify it under
 # the terms of the MIT License; see LICENSE file for more details.
 
-"""inspirehep."""
-
 from __future__ import absolute_import, print_function
 
-from ..version import __version__
+from invenio_app.factory import create_api
+from invenio_base.app import create_cli
 
-__all__ = ('__version__', )
+cli = create_cli(create_app=create_api)
