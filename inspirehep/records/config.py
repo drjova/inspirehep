@@ -55,18 +55,6 @@ RECORDS_REST_ENDPOINTS = {
 }
 """REST API for inspirehep."""
 
-RECORDS_UI_ENDPOINTS = {
-    'recid': {
-        'pid_type': 'recid',
-        'route': '/records/<pid_value>',
-        'template': 'records/record.html',
-    },
-}
-"""Records UI for inspirehep."""
-
-SEARCH_UI_JSTEMPLATE_RESULTS = 'templates/records/results.html'
-"""Result list template."""
-
 PIDSTORE_RECID_FIELD = 'lit'
 
 INSPIREHEP_ENDPOINTS_ENABLED = True
