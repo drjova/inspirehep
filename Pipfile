@@ -8,6 +8,7 @@ oauthlib = ">=1.1.2,!=2.0.0,!=2.0.3,!=2.0.4,!=2.0.5,<3.0.0"
 invenio = {version = ">=3.0.0",extras = ["base", "metadata", "postgresql", "auth", "elasticsearch5", ]}
 inspirehep = {editable = true,path = "."}
 uwsgi = ">=2.0"
+inspire-schemas = ">=59.0.0"
 
 [dev-packages]
 check-manifest = ">=0.35"

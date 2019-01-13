@@ -18,10 +18,10 @@ from __future__ import absolute_import, print_function
 
 from invenio_records_rest.loaders.marshmallow import \
     json_patch_loader, marshmallow_loader
-from ..marshmallow import MetadataSchemaV1
+from ..marshmallow import RecordSchemaV1 
 
 #: JSON loader using Marshmallow for data validation.
-json_v1 = marshmallow_loader(MetadataSchemaV1)
+json_v1 = marshmallow_loader(RecordSchemaV1)
 
 __all__ = (
     'json_v1',

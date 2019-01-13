@@ -49,7 +49,7 @@ setup(
             'inspirehep = inspirehep.records:InspireRecords',
          ],
         'invenio_jsonschemas.schemas': [
-            'inspirehep = inspirehep.records.jsonschemas'
+            'inspire_records_schemas = inspire_schemas'
         ],
         'invenio_search.mappings': [
             'records = inspirehep.records.mappings'
