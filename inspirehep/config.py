@@ -27,6 +27,9 @@ def _(x):
     """Identity function used to trigger string extraction."""
     return x
 
+# DEBUG
+FLASK_ENV = 'development'
+FLASK_DEBUG = 1
 
 # Rate limiting
 # =============
