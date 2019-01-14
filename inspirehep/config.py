@@ -90,7 +90,7 @@ SQLALCHEMY_DATABASE_URI = \
 # JSONSchemas
 # ===========
 #: Hostname used in URLs for local JSONSchemas.
-JSONSCHEMAS_HOST = 'inspirehep.net'
+JSONSCHEMAS_HOST = "localhost:5000"
 
 # Flask configuration
 # ===================
@@ -160,11 +160,7 @@ RECORDS_REST_ENDPOINTS = {
 }
 """REST API for inspirehep."""
 
-PIDSTORE_RECID_FIELD = 'lit'
-
-INSPIREHEP_ENDPOINTS_ENABLED = True
-"""Enable/disable automatic endpoint registration."""
-
+PIDSTORE_RECID_FIELD = 'control_number'
 
 RECORDS_REST_FACETS = dict(
     records=dict(
