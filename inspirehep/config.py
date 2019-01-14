@@ -33,17 +33,6 @@ def _(x):
 #: Storage for ratelimiter.
 RATELIMIT_STORAGE_URL = 'redis://localhost:6379/3'
 
-# I18N
-# ====
-#: Default language
-BABEL_DEFAULT_LANGUAGE = 'en'
-#: Default time zone
-BABEL_DEFAULT_TIMEZONE = 'Europe/Zurich'
-#: Other supported languages (do not include the default language in list).
-I18N_LANGUAGES = [
-    # ('fr', _('French'))
-]
-
 # Email configuration
 # ===================
 #: Email address for support.
