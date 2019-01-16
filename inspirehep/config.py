@@ -21,7 +21,8 @@ from datetime import timedelta
 from invenio_indexer.api import RecordIndexer
 from invenio_records_rest.facets import terms_filter
 from invenio_records_rest.utils import allow_all, check_elasticsearch, deny_all
-from invenio_search import RecordsSearch
+
+from .search.api import LiteratureSearch
 
 def _(x):
     """Identity function used to trigger string extraction."""
@@ -117,12 +118,12 @@ DEBUG_TB_INTERCEPT_REDIRECTS = False
 
 
 RECORDS_REST_ENDPOINTS = {
-    'recid': dict(
-        pid_type='recid',
-        pid_minter='recid',
-        pid_fetcher='recid',
+    'lit': dict(
+        pid_type='lit',
+        pid_minter='lit',
+        pid_fetcher='lit',
         default_endpoint_prefix=True,
-        search_class=RecordsSearch,
+        search_class=LiteratureSearch,
         indexer_class=RecordIndexer,
         search_index='records',
         search_type=None,
@@ -139,7 +140,7 @@ RECORDS_REST_ENDPOINTS = {
                                  ':json_v1'),
         },
         list_route='/records/',
-        item_route='/records/<pid(recid):pid_value>',
+        item_route='/records/<pid(lit):pid_value>',
         default_media_type='application/json',
         max_result_window=10000,
         error_handlers=dict(),
