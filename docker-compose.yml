@@ -23,3 +23,11 @@ services:
     extends:
       file: docker-services.yml
       service: es
+  flower:
+    extends:
+      file: docker-services.yml
+      service: flower
+  kibana:
+    extends: 
+      file:   docker-services.yml
+      service: kibana

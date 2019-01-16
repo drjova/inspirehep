@@ -62,8 +62,8 @@ services:
       - "15672:15672"
       - "5672:5672"
   es:
-    image: elasticsearch:5.6.4
-    restart: "always"
+    image: inspirehep/elasticsearch5:simple
+    # restart: "always"
     environment:
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
@@ -72,7 +72,7 @@ services:
         soft: -1
         hard: -1
     mem_limit: 1g
-    ports:
+    ports:  
       - "9200:9200"
       - "9300:9300"
   kibana:

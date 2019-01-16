@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "3fb2fd9417d19bb4ec143e01209614a21d088f982501afc876762392a103e044"
+            "sha256": "daaeb5b8404c5fcad8697ebae1a66e52f3faa92c3f532050e846afff3cca7d4d"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -593,10 +593,10 @@
         },
         "invenio-oauth2server": {
             "hashes": [
-                "sha256:b24d2498d74c5d5d986f46ad72a805d6d647324e613446e21491ad892dec9103",
-                "sha256:e0412f4dfba21a57a842f6a919a58cb89b42bd82c486e1a20bbeddf0b6eb48fa"
+                "sha256:303b642e24ca8942d1c5f888ea648625ee4f27ce83bda31adb6a047bac6aca1b",
+                "sha256:d5f5f12df1a76d65f17b3dafdc40cec91667f4cb41694e4ab134b7d31018a0b7"
             ],
-            "version": "==1.0.2"
+            "version": "==1.0.3"
         },
         "invenio-oauthclient": {
             "hashes": [
@@ -853,10 +853,11 @@
         },
         "marshmallow": {
             "hashes": [
-                "sha256:313836a251e67d2ef06631f3bddfffdd7d1c5b16b4efc76244afa6218c5e17b0",
-                "sha256:c850c60dbb840860f58f161b81ae25cf84807eeae3f9a1d9a2f8c704d6bd2b80"
+                "sha256:958e6640bec9a04ca15701e3d99b12c4269d0f43be596f00eeca1f2baf530abc",
+                "sha256:d072db26baf2b0de886ad58f12360610d7bdea439e975a0179d1da82340c4f72"
             ],
-            "version": "==3.0.0rc3"
+            "index": "pypi",
+            "version": "==2.18.0"
         },
         "maxminddb": {
             "hashes": [
@@ -1270,13 +1271,6 @@
             ],
             "version": "==1.5"
         },
-        "appdirs": {
-            "hashes": [
-                "sha256:9e5896d1372858f8dd3344faf4e5014d21849c756c8d5701f78f8a103b372d92",
-                "sha256:d8b24664561d0d34ddfaec54636d502d7cea6e29c3eaf68f3df6180863e2166e"
-            ],
-            "version": "==1.4.3"
-        },
         "atomicwrites": {
             "hashes": [
                 "sha256:0312ad34fcad8fac3704d441f7b317e50af620823353ec657a53e981f92920c0",
@@ -1290,14 +1284,6 @@
                 "sha256:ca4be454458f9dec299268d472aaa5a11f67a4ff70093396e1ceae9c76cf4bbb"
             ],
             "version": "==18.2.0"
-        },
-        "black": {
-            "hashes": [
-                "sha256:817243426042db1d36617910df579a54f1afd659adb96fc5032fcf4b36209739",
-                "sha256:e030a9a28f542debc08acceb273f228ac422798e5215ba2a791a6ddeaaca22a5"
-            ],
-            "index": "pypi",
-            "version": "==18.9b0"
         },
         "check-manifest": {
             "hashes": [
@@ -1560,13 +1546,6 @@
                 "sha256:9f3bcd3c401c3e862ec0ebe6d2c069ebc012ce142cce209c098ccb5b09136e89"
             ],
             "version": "==1.2.1"
-        },
-        "toml": {
-            "hashes": [
-                "sha256:229f81c57791a41d65e399fc06bf0848bab550a9dfd5ed66df18ce5f05e73d5c",
-                "sha256:235682dd292d5899d361a811df37e04a8828a5b1da3115886b73cf81ebc9100e"
-            ],
-            "version": "==0.10.0"
         },
         "urllib3": {
             "hashes": [

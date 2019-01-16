@@ -9,6 +9,8 @@ inspirehep = {editable = true,path = "."}
 uwsgi = ">=2.0"
 inspire-schemas = ">=59.0.0"
 requests-oauthlib = "==1.0.0"
+# pre-release is enable globally
+marshmallow = "<3.0.0"
 
 [dev-packages]
 check-manifest = ">=0.35"
@@ -23,7 +25,7 @@ pytest-mock = ">=1.6.0"
 pytest-pep8 = ">=1.0.6"
 pytest-random-order = ">=0.5.4"
 pytest-runner = ">=3.0.0,<5"
-black = "==18.9b0"
+# black = "==18.9b0"
 
 [requires]
 python_version = "3.6"
@@ -32,4 +34,4 @@ python_version = "3.6"
 test = "python setup.py test"
 
 [pipenv]
-allow_prereleases = true
+allow_prereleases = false
