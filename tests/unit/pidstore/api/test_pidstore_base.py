@@ -31,8 +31,7 @@ from mock import patch, MagicMock
 from inspirehep.pidstore.api import PidStoreBase
 
 
-@pytest.mark.parametrize(
-    "pid_type,expected", [("lit", "literature"), ("jes", None)])
+@pytest.mark.parametrize("pid_type,expected", [("lit", "literature"), ("jes", None)])
 @patch(
     "inspirehep.pidstore.api.PidStoreBase._get_config_pid_types_to_endpoints",
     return_value={"lit": "literature"},
