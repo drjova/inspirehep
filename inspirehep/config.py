@@ -54,6 +54,10 @@ SECURITY_EMAIL_SUBJECT_REGISTER = _(
 #: Redis session storage URL.
 ACCOUNTS_SESSION_REDIS_URL = 'redis://localhost:6379/1'
 
+# Deal with inconcistency :puke:
+PID_TYPES_TO_ENDPOINTS = {"lit": "literature"}
+PID_TYPES_TO_SCHEMA = {"hep": "lit"}
+
 # Celery configuration
 # ====================
 
@@ -103,9 +107,6 @@ SESSION_COOKIE_SECURE = True
 #: route correct hosts to the application.
 APP_ALLOWED_HOSTS = ['inspirehep.net', 'localhost', '127.0.0.1']
 
-# OAI-PMH
-# =======
-OAISERVER_ID_PREFIX = 'oai:inspirehep.net:'
 
 # Debug
 # =====
@@ -118,10 +119,11 @@ DEBUG_TB_INTERCEPT_REDIRECTS = False
 
 
 RECORDS_REST_ENDPOINTS = {
-    'lit': dict(
+    'literature': dict(
         pid_type='lit',
-        pid_minter='lit',
-        pid_fetcher='lit',
+        # change when we enable rest
+        pid_minter='inspire_recid_minter',
+        pid_fetcher='recid',
         default_endpoint_prefix=True,
         search_class=LiteratureSearch,
         indexer_class=RecordIndexer,
@@ -140,7 +142,7 @@ RECORDS_REST_ENDPOINTS = {
                                  ':json_v1'),
         },
         list_route='/records/',
-        item_route='/records/<pid(lit):pid_value>',
+        item_route='/records/<pid(lit,record_class="inspirehep.records.api.LiteratureRecord"):pid_value>',
         default_media_type='application/json',
         max_result_window=10000,
         error_handlers=dict(),
