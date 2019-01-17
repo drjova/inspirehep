@@ -2,6 +2,12 @@
 
 ### Installation
 
+#### pre-commit
+Install ``pre-commit`` https://pre-commit.com
+
+#### pyenv (optional)
+install ``pyenv`` https://github.com/pyenv/pyenv
+
 ```bash
 $ pip install pipenv
 ```
