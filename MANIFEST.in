@@ -26,3 +26,13 @@ include scripts/server
 include scripts/setup
 include scripts/update
 recursive-include docker *.cfg *.conf *.crt *.ini *.key *.pem *.sh
+include *.base
+include *.lock
+include *.rst
+include *.sh
+include *.yaml
+include *.yml
+include Pipfile
+include pytest.ini
+recursive-include inspirehep *.json
+recursive-include tests *.py
