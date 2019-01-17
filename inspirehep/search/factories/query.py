@@ -8,9 +8,8 @@
 
 from __future__ import absolute_import, division, print_function
 
-from elasticsearch_dsl import Q
-
 import inspire_query_parser
+from elasticsearch_dsl import Q
 
 
 def inspire_query_factory():

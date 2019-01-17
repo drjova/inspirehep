@@ -25,9 +25,7 @@
 from __future__ import absolute_import, division, print_function
 
 import pytest
-
 from helpers.factories.models.records import RecordMetadataFactory
-
 from invenio_pidstore.models import PIDStatus
 
 from inspirehep.pidstore.providers.recid import InspireRecordIdProvider

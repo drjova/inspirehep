@@ -23,9 +23,8 @@
 from __future__ import absolute_import, division, print_function
 
 import pytest
-from mock import patch, MagicMock
-
 from helpers.providers.faker import faker
+from mock import MagicMock, patch
 
 from inspirehep.records.api import InspireRecord
 

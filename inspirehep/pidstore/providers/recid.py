@@ -24,7 +24,6 @@ from __future__ import absolute_import, division, print_function
 
 import requests
 from flask import current_app
-
 from invenio_pidstore.models import PIDStatus, RecordIdentifier
 from invenio_pidstore.providers.base import BaseProvider
 

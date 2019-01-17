@@ -28,7 +28,7 @@ from collections import namedtuple
 import six
 from flask import current_app
 
-from ..errors import MissingSchema, MissingControlNumber
+from ..errors import MissingControlNumber, MissingSchema
 from ..providers.recid import InspireRecordIdProvider
 
 FetchedPID = namedtuple("FetchedPID", ["provider", "pid_type", "pid_value"])

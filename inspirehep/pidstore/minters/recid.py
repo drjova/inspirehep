@@ -22,8 +22,8 @@
 
 from __future__ import absolute_import, division, print_function
 
-from ..providers.recid import InspireRecordIdProvider
 from ..errors import MissingSchema
+from ..providers.recid import InspireRecordIdProvider
 
 
 def recid_minter(record_uuid, data, pid_type, object_type):

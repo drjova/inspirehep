@@ -26,15 +26,14 @@ from __future__ import absolute_import, division, print_function
 
 import uuid
 
-from invenio_pidstore.models import PersistentIdentifier, RecordIdentifier
 from inspire_dojson.utils import strip_empty_values
 from inspire_schemas.api import validate as schema_validate
-from invenio_pidstore.errors import PIDDoesNotExistError
-from invenio_records_files.api import Record
-from invenio_records.models import RecordMetadata
 from invenio_db import db
-
-from sqlalchemy import Text, or_, not_, cast, type_coerce
+from invenio_pidstore.errors import PIDDoesNotExistError
+from invenio_pidstore.models import PersistentIdentifier, RecordIdentifier
+from invenio_records.models import RecordMetadata
+from invenio_records_files.api import Record
+from sqlalchemy import Text, cast, not_, or_, type_coerce
 from sqlalchemy.dialects.postgresql import JSONB
 
 

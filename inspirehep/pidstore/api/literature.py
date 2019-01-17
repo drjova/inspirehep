@@ -25,8 +25,8 @@ from __future__ import absolute_import, division, print_function
 from flask import current_app
 from six.moves.urllib.parse import urlsplit
 
-from .base import PidStoreBase
 from ..minters.recid import recid_minter
+from .base import PidStoreBase
 
 
 class PidStoreLiterature(PidStoreBase):

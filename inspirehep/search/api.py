@@ -10,11 +10,11 @@
 from __future__ import absolute_import, print_function
 
 import logging
+
 from elasticsearch import RequestError
 from elasticsearch_dsl.query import Q
-
-from invenio_search.api import DefaultFilter, RecordsSearch
 from invenio_search import current_search_client as es
+from invenio_search.api import DefaultFilter, RecordsSearch
 
 from .factories import inspire_query_factory
 

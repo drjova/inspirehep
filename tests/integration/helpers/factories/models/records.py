@@ -25,13 +25,12 @@
 from __future__ import absolute_import, division, print_function
 
 import random
+
 import factory
 import pytest
-
-from invenio_records.models import RecordMetadata
-
 from helpers.factories.models.base import BaseFactory
 from helpers.providers.faker import faker
+from invenio_records.models import RecordMetadata
 
 
 class RecordMetadataFactory(BaseFactory):

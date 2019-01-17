@@ -25,13 +25,12 @@
 from __future__ import absolute_import, division, print_function
 
 import random
+
 import factory
 import pytest
-
-from invenio_pidstore.models import PIDStatus, PersistentIdentifier
-
 from helpers.factories.models.base import BaseFactory
 from helpers.providers.faker import faker
+from invenio_pidstore.models import PersistentIdentifier, PIDStatus
 
 
 class PersistentIdentifierFactory(BaseFactory):

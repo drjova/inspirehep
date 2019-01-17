@@ -27,7 +27,7 @@ from __future__ import absolute_import, division, print_function
 import pytest
 
 from inspirehep.pidstore.api import PidStoreLiterature
-from inspirehep.pidstore.errors import MissingSchema, MissingControlNumber
+from inspirehep.pidstore.errors import MissingControlNumber, MissingSchema
 
 
 def test_fetch(base_app, db, create_record):

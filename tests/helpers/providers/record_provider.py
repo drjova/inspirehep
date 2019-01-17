@@ -24,12 +24,11 @@
 
 from __future__ import absolute_import, division, print_function
 
-import pytest
 import random
 
+import pytest
 from faker import Faker
 from faker.providers import BaseProvider
-
 from inspire_schemas.api import validate as schema_validate
 
 fake = Faker()

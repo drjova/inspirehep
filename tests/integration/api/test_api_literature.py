@@ -24,15 +24,15 @@
 
 from __future__ import absolute_import, division, print_function
 
-import pytest
 import uuid
-from mock import patch, MagicMock
-from helpers.providers.faker import faker
 
-from invenio_records.models import RecordMetadata
-from invenio_pidstore.models import PersistentIdentifier
+import pytest
+from helpers.providers.faker import faker
 from invenio_pidstore.errors import PIDAlreadyExists
+from invenio_pidstore.models import PersistentIdentifier
+from invenio_records.models import RecordMetadata
 from jsonschema import ValidationError
+from mock import MagicMock, patch
 
 from inspirehep.records.api import LiteratureRecord
 

@@ -25,8 +25,7 @@
 from __future__ import absolute_import, division, print_function
 
 import pytest
-from mock import patch, MagicMock
-
+from mock import MagicMock, patch
 
 from inspirehep.pidstore.api import PidStoreBase
 

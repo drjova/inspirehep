@@ -25,14 +25,12 @@
 from __future__ import absolute_import, division, print_function
 
 import pytest
-
-from invenio_records.models import RecordMetadata
+from helpers.providers.faker import faker
 from invenio_pidstore.models import PersistentIdentifier, RecordIdentifier
+from invenio_records.models import RecordMetadata
 
 from inspirehep.records.api import InspireRecord
 from inspirehep.records.api.base import InspireQueryBuilder
-
-from helpers.providers.faker import faker
 
 
 def test_query_builder_returns_not_deleted(base_app, db, create_record):
