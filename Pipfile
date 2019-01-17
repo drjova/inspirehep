@@ -40,6 +40,8 @@ pytest-pep8 = ">=1.0.6"
 pytest-random-order = ">=0.5.4"
 pytest-runner = ">=3.0.0,<5"
 black = "==18.9b0"
+factory_boy = "~=2.11.1,>=2.11.1"
+requests-mock = "~=1.5.2,>=1.5.2"
 
 [requires]
 python_version = "3.6"

@@ -31,6 +31,7 @@ def _(x):
 # DEBUG
 FLASK_ENV = 'development'
 FLASK_DEBUG = 1
+DEBUG = 1
 
 # Rate limiting
 # =============
@@ -198,3 +199,4 @@ RECORDS_REST_DEFAULT_SORT = dict(
     )
 )
 """Set default sorting options."""
+
