@@ -25,3 +25,9 @@
 from __future__ import absolute_import, division, print_function
 
 import pytest
+
+
+@pytest.fixture(scope="module")
+def app_config(app_config):
+    app_config.update({"LEGACY_PID_PROVIDER": "http://someurl.com"})
+    return app_config

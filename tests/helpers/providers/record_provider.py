@@ -25,3 +25,30 @@
 from __future__ import absolute_import, division, print_function
 
 import pytest
+import random
+
+from faker import Faker
+from faker.providers import BaseProvider
+
+from inspire_schemas.api import validate as schema_validate
+
+fake = Faker()
+
+
+class RecordProvider(BaseProvider):
+    def control_number(self):
+        return fake.random_number(digits=6)
+
+    def record(self, data=None, with_control_number=False):
+        record = {
+            "$schema": "http://localhost:5000/schemas/records/hep.json",
+            "titles": [{"title": fake.sentence()}],
+            "document_type": ["article"],
+            "_collections": ["Literature"],
+        }
+        if with_control_number:
+            record["control_number"] = self.control_number()
+        if data:
+            record.update(data)
+        schema_validate(record)
+        return record

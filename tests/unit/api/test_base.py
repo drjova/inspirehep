@@ -20,8 +20,22 @@
 # granted to it by virtue of its status as an Intergovernmental Organization
 # or submit itself to any jurisdiction.
 
-"""INSPIRE module that adds more fun to the platform."""
-
 from __future__ import absolute_import, division, print_function
 
 import pytest
+from mock import patch, MagicMock
+
+from helpers.providers.faker import faker
+
+from inspirehep.records.api import InspireRecord
+
+
+def test_strip_empty_values():
+    empty_fields = {"empty_string": "", "empty_array": [], "empty_dict": {}}
+    data = faker.record()
+    data.update(empty_fields)
+    data_stripped = InspireRecord.strip_empty_values(data)
+
+    assert "empty_string" not in data_stripped
+    assert "empty_array" not in data_stripped
+    assert "empty_dict" not in data_stripped

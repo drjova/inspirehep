@@ -25,3 +25,11 @@
 from __future__ import absolute_import, division, print_function
 
 import pytest
+
+import factory
+
+
+class BaseFactory(factory.alchemy.SQLAlchemyModelFactory):
+    class Meta:
+        abstract = True
+        sqlalchemy_session_persistence = "commit"

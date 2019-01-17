@@ -24,4 +24,30 @@
 
 from __future__ import absolute_import, division, print_function
 
+import random
+import factory
 import pytest
+
+from invenio_records.models import RecordMetadata
+
+from helpers.factories.models.base import BaseFactory
+from helpers.providers.faker import faker
+
+
+class RecordMetadataFactory(BaseFactory):
+    class Meta:
+        model = RecordMetadata
+
+    @classmethod
+    def _adjust_kwargs(cls, **kwargs):
+        data = kwargs.pop("data", None)
+        control_number = kwargs.pop("control_number", None)
+
+        if data:
+            kwargs["json"].update(data)
+
+        if control_number and "control_number" not in kwargs["json"]:
+            kwargs["json"].update({"control_number": control_number})
+        return kwargs
+
+    json = factory.Dict(faker.record())

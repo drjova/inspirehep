@@ -40,8 +40,8 @@ setup(
     platforms="any",
     entry_points={
         "console_scripts": ["inspirehep = inspirehep.cli:cli"],
-        'invenio_pidstore.minters': [
-            'inspire_recid_minter = inspirehep.pidstore.minters.recid:recid_minter',
+        "invenio_pidstore.minters": [
+            "inspire_recid_minter = inspirehep.pidstore.minters.recid:recid_minter"
         ],
         "invenio_config.module": ["inspirehep = inspirehep.config"],
         "invenio_base.api_apps": ["inspirehep = inspirehep.records:InspireRecords"],

@@ -25,3 +25,35 @@
 from __future__ import absolute_import, division, print_function
 
 import pytest
+
+from inspirehep.pidstore.api import PidStoreLiterature
+from inspirehep.pidstore.errors import MissingSchema, MissingControlNumber
+
+
+def test_fetch(base_app, db, create_record):
+    record = create_record("lit", with_pid=False)
+
+    PidStoreLiterature.mint(record.id, record.json)
+    pid_fetch = PidStoreLiterature.fetch(record.id, record.json)
+
+    expected_control_number = str(record.json["control_number"])
+
+    assert expected_control_number == pid_fetch.pid_value
+
+
+def test_fetch_with_missing_schema(base_app, db, create_record):
+    record = create_record("lit")
+    data = record.json
+    del data["$schema"]
+
+    with pytest.raises(MissingSchema):
+        PidStoreLiterature.fetch(record.id, record.json)
+
+
+def test_fetch_with_missing_control_number(base_app, db, create_record):
+    record = create_record("lit")
+    data = record.json
+    del data["control_number"]
+
+    with pytest.raises(MissingControlNumber):
+        PidStoreLiterature.fetch(record.id, record.json)
