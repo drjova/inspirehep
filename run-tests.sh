@@ -9,5 +9,5 @@
 pipenv check --ignore 36437 --ignore 36759 && \
 pipenv run isort -rc -c -df && \
 pipenv run check-manifest --ignore ".travis-*" && \
-pipenv run py.test tests/unit
+pipenv run py.test tests/unit && \
 pipenv run py.test tests/integration

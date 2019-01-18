@@ -13,7 +13,10 @@ set -e
 if [ "$SUITE" == "unit" ]; then
     pipenv check --ignore 36437 --ignore 36759 && \
     pipenv run isort -rc -c -df && \
-    pipenv run check-manifest --ignore ".travis-*" && \
+    pipenv run check-manifest --ignore ".travis-*"  && \
+    pipenv run py.test tests/unit
 fi
 
-pipenv run py.test tests/$SUITE
+if [ "$SUITE" == "integration" ]; then
+    pipenv run py.test tests/integration
+fi
