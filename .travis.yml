@@ -57,3 +57,6 @@ after_script:
 
 after_success:
   - coveralls
+
+after_fail:
+  - pipenv run pip freeze
