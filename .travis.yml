@@ -49,8 +49,7 @@ before_script:
   - if [ ${SUITE} == 'integration' ]; then ./docker/wait-for-services.sh; fi 
 
 script:
-  - if [ ${SUITE} == 'unit' ]; then ./run-tests.sh; fi 
-  - if [ ${SUITE} == 'integration' ]; then pipenv run py.test tests/integration; fi 
+  - ./run-tests-ci.sh
 
 after_script:
   - if [ ${SUITE} == 'integration' ]; then docker-compose kill -s SIGTERM; fi
