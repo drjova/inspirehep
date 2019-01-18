@@ -31,14 +31,14 @@ services:
   - docker
 
 env:
-  global:
-    - E2E=no
   matrix:
-    - REQUIREMENTS=prod EXTRAS=all,elasticsearch5,postgresql ES_VERSION=5.6.4
-    - REQUIREMENTS=qa EXTRAS=all,elasticsearch6,mysql ES_VERSION=5.6.4
+    - REQUIREMENTS=prod EXTRAS=all,elasticsearch5,postgresql ES_VERSION=5.6.4 SUITE=integration
+    - REQUIREMENTS=prod SUITE=unit
+    - REQUIREMENTS=qa EXTRAS=all,elasticsearch5,postgresql ES_VERSION=5.6.4 SUITE=integration
+    - REQUIREMENTS=qa SUITE=unit
 
 python:
-  - "3.6"
+  - "3.7"
 
 before_install:
   - "sudo service postgresql stop"
@@ -53,7 +53,8 @@ before_script:
   - "./docker/wait-for-services.sh"
 
 script:
-  - ./run-tests.sh
+  - if [ ${SUITE} == 'unit' ]; then ./run-tests.sh; fi 
+  - if [ ${SUITE} == 'integration' ]; then pipenv run py.test tests/integration fi 
 
 after_success:
   - coveralls
