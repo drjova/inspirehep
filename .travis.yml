@@ -5,19 +5,17 @@
 # inspirehep is free software; you can redistribute it and/or modify it under
 # the terms of the MIT License; see LICENSE file for more details.
 
-addons:
-  chrome: stable # https://docs.travis-ci.com/user/chrome
+# addons:
+#  chrome: stable # https://docs.travis-ci.com/user/chrome
 
-# Chrome Webdriver fails if not on sudo
-# See https://github.com/travis-ci/travis-ci/issues/8836
 sudo: true
 
-dist: trusty # Chrome driver fails if not trusty dist
+dist: trusty
 
 notifications:
   email: # sent to the committer and the author
-    on_success: never # default: always
-    on_failure: never # default: always
+    on_success: never
+    on_failure: never
 
 language: python
 
@@ -32,7 +30,7 @@ services:
 
 env:
   matrix:
-    - EXTRAS=all,elasticsearch5,postgresql ES_VERSION=5.6.4 SUITE=integration
+    - SUITE=integration EXTRAS=all,elasticsearch5,postgresql ES_VERSION=5.6.4
     - SUITE=unit
 
 python:
@@ -48,7 +46,7 @@ install:
   - "./scripts/bootstrap --ci"
 
 before_script:
-  - "./docker/wait-for-services.sh"
+  - if [ ${SUITE} == 'integration' ]; then "./docker/wait-for-services.sh; fi 
 
 script:
   - if [ ${SUITE} == 'unit' ]; then ./run-tests.sh; fi 
