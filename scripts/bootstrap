@@ -32,7 +32,5 @@ if [ ${#flags[0]} -eq 0 ]; then
 fi
 
 pipenv install ${flags[@]}
-
-# remove this shit
-# pipenv run invenio collect -v
-# pipenv run invenio webpack buildall
+# install pre-commit
+pipenv run pre-commit install
