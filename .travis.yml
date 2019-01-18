@@ -36,6 +36,7 @@ env:
     - REQUIREMENTS=prod SUITE=unit
     - REQUIREMENTS=edge SUITE=unit
 
+# XXX: needs work around for 3.7
 python:
   - "3.6"
 
