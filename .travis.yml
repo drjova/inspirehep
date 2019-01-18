@@ -29,11 +29,9 @@ services:
   - docker
 
 env:
-  global:
-    - REQUIREMENTS=no
   matrix:
-    - SUITE=integration EXTRAS=all,elasticsearch5,postgresql ES_VERSION=5.6.4
-    - SUITE=unit
+    - REQUIREMENTS=lock SUITE=integration EXTRAS=all,elasticsearch5,postgresql ES_VERSION=5.6.4
+    - REQUIREMENTS=lock SUITE=unit
 
 python:
   - "3.6"
@@ -53,6 +51,10 @@ before_script:
 script:
   - if [ ${SUITE} == 'unit' ]; then ./run-tests.sh; fi 
   - if [ ${SUITE} == 'integration' ]; then pipenv run py.test tests/integration; fi 
+
+after_script:
+  - if [ ${SUITE} == 'integration' ]; then docker-compose kill -s SIGTERM; fi
+  - if [ ${SUITE} == 'integration' ]; then docker-compose rm -f; fi
 
 after_success:
   - coveralls
