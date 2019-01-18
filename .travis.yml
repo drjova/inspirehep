@@ -34,7 +34,8 @@ env:
   matrix:
     - REQUIREMENTS=prod SUITE=integration EXTRAS=all,elasticsearch5,postgresql ES_VERSION=5.6.4
     - REQUIREMENTS=prod SUITE=unit
-    - REQUIREMENTS=edge SUITE=unit
+    - REQUIREMENTS=skip-lock SUITE=integration EXTRAS=all,elasticsearch5,postgresql ES_VERSION=5.6.4
+    - REQUIREMENTS=skip-lock SUITE=unit
 
 # XXX: needs work around for 3.7
 python:
