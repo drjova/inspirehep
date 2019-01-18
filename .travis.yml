@@ -29,6 +29,8 @@ services:
   - docker
 
 env:
+  global:
+    - REQUIREMENTS=no
   matrix:
     - SUITE=integration EXTRAS=all,elasticsearch5,postgresql ES_VERSION=5.6.4
     - SUITE=unit
