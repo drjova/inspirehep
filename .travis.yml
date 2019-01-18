@@ -46,7 +46,7 @@ install:
   - "./scripts/bootstrap --ci"
 
 before_script:
-  - if [ ${SUITE} == 'integration' ]; then "./docker/wait-for-services.sh; fi 
+  - if [ ${SUITE} == 'integration' ]; then ./docker/wait-for-services.sh; fi 
 
 script:
   - if [ ${SUITE} == 'unit' ]; then ./run-tests.sh; fi 
