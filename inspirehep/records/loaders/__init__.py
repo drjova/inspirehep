@@ -23,6 +23,4 @@ from invenio_records_rest.loaders.marshmallow import (
 from ..marshmallow import RecordSchemaV1
 
 #: JSON loader using Marshmallow for data validation.
-json_v1 = marshmallow_loader(RecordSchemaV1)
-
-__all__ = ("json_v1",)
+record_schema = marshmallow_loader(RecordSchemaV1)
