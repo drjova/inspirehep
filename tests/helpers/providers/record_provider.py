@@ -36,9 +36,9 @@ fake = Faker()
 
 class RecordProvider(BaseProvider):
     def control_number(self):
-        return fake.random_number(digits=6)
+        return fake.random_number(digits=8)
 
-    def record(self, data=None, with_control_number=False):
+    def record(self, data=None, with_control_number=False, validate=True):
         record = {
             "$schema": "http://localhost:5000/schemas/records/hep.json",
             "titles": [{"title": fake.sentence()}],
@@ -49,5 +49,6 @@ class RecordProvider(BaseProvider):
             record["control_number"] = self.control_number()
         if data:
             record.update(data)
-        schema_validate(record)
+        if validate:
+            schema_validate(record)
         return record
