@@ -18,6 +18,7 @@ from marshmallow import fields, missing, validate
 from inspire_utils.date import earliest_date
 from inspire_utils.record import get_value
 from inspire_utils.helpers import force_list
+from inspire_utils.name import generate_name_variations, ParsedName
 
 from . import RecordSchema
 
@@ -34,6 +35,15 @@ class LiteratureEnhancedSchema(RecordSchema):
     author_count = fields.Method("get_author_count", dump_only=True)
     earliest_date = fields.Method("get_earliest_date", dump_only=True)
     facet_inspire_doc_type = fields.Method("get_facet_inspire_doc_type", dump_only=True)
+    number_of_references = fields.Method("get_number_of_references", dump_only=True)
+
+    @staticmethod
+    def normilize_unicode(text):
+        return normalize("NFKC", text).lower()
+
+    @staticmethod
+    def name_variations(names):
+        return generate_name_variations(names)
 
     def get_abstracts(self, data):
         abstracts = data.get("abstracts", [])
@@ -48,8 +58,21 @@ class LiteratureEnhancedSchema(RecordSchema):
 
         for index, author in enumerate(authors):
             full_name = author["full_name"]
+            name_variations = LiteratureEnhancedSchema.name_variations(full_name)
             authors[index].update(
-                {"full_name_unicode_normalized": normalize("NFKC", full_name).lower()}
+                {
+                    "full_name_unicode_normalized": LiteratureEnhancedSchema.normilize_unicode(
+                        full_name
+                    ),
+                    "name_variations": LiteratureEnhancedSchema.name_variations(
+                        full_name
+                    ),
+                    "name_suggest": {
+                        "input": [
+                            variation for variation in name_variations if variation
+                        ]
+                    },
+                }
             )
         return authors
 
@@ -93,3 +116,9 @@ class LiteratureEnhancedSchema(RecordSchema):
         if "refereed" in data and data["refereed"]:
             result.append("peer reviewed")
         return result
+
+    def get_number_of_references(self, data):
+        references = data.get("references")
+
+        if references is not None:
+            return len(references)
