@@ -118,3 +118,17 @@ def test_mint_with_many_minters():
     minter_1.assert_called_once_with(uuid, data, "pid_type", "rec")
     minter_2.assert_called_once_with(uuid, data, "pid_type", "rec")
     minter_3.assert_called_once_with(uuid, data, "pid_type", "rec")
+
+
+@pytest.mark.parametrize(
+    "url,expected",
+    [
+        ("http://labs.inspirehep.net/api/literature/1273685", ("lit", "1273685")),
+        ("http://labs.inspirehep.net/api/literature/1273685/", ("lit", "1273685")),
+        ("non-url-string", None),
+    ],
+)
+def test_get_pid_from_record_uri(url, expected):
+    data_result = PidStoreBase.get_pid_from_record_uri(url)
+
+    assert expected == data_result
