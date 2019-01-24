@@ -16,7 +16,6 @@ from .json import RecordSchemaV1
 
 
 class RecordSchema(Schema):
-
     @post_dump
     def clean_data(self, data):
         return strip_empty_values(data)

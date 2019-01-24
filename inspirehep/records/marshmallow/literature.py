@@ -29,54 +29,53 @@ class LiteratureSchema(RecordSchema):
 # Enhanced schema is a record we prepare for elasticsearch
 class LiteratureEnhancedSchema(RecordSchema):
 
-    abstracts = fields.Method('get_abstracts', dump_only=True)
-    author_count = fields.Method('get_author_count', dump_only=True)
-    authors_full_name_unicode_normalized = fields.Method('get_authors_full_name_unicode_normalized', dump_only=True)
-    earliest_date = fields.Method('get_earliest_date', dump_only=True)
+    abstracts = fields.Method("get_abstracts", dump_only=True)
+    authors = fields.Method("get_authors", dump_only=True)
+    author_count = fields.Method("get_author_count", dump_only=True)
+    earliest_date = fields.Method("get_earliest_date", dump_only=True)
+    facet_inspire_doc_type = fields.Method("get_facet_inspire_doc_type", dump_only=True)
 
     def get_abstracts(self, data):
-        abstracts = data.get('abstracts', [])
+        abstracts = data.get("abstracts", [])
         for abstract in abstracts:
-            source = abstract.get('source')
+            source = abstract.get("source")
             if source:
-                abstract.update({
-                    'abstract_source_suggest': {
-                        'input': source,
-                    },
-                })
+                abstract.update({"abstract_source_suggest": {"input": source}})
         return abstracts
 
+    def get_authors(self, data):
+        authors = data.get("authors", [])
+
+        for index, author in enumerate(authors):
+            full_name = author["full_name"]
+            authors[index].update(
+                {"full_name_unicode_normalized": normalize("NFKC", full_name).lower()}
+            )
+        return authors
+
     def get_author_count(self, data):
-        authors = data.get('authors', [])
+        authors = data.get("authors", [])
 
         authors_excluding_supervisors = [
-            author for author in authors
-            if 'supervisor' not in author.get('inspire_roles', [])
+            author
+            for author in authors
+            if "supervisor" not in author.get("inspire_roles", [])
         ]
         return len(authors_excluding_supervisors)
 
-    def get_authors_full_name_unicode_normalized(self, data):
-        authors = data.get('authors', [])
-
-        for index, author in enumerate(authors):
-            full_name = author['full_name']
-            data['authors'][index].update({
-                'full_name_unicode_normalized': normalize('NFKC', full_name).lower()
-            })
-
-
     def get_earliest_date(self, data):
         date_paths = [
-            'preprint_date',
-            'thesis_info.date',
-            'thesis_info.defense_date',
-            'publication_info.year',
-            'legacy_creation_date',
-            'imprints.date',
+            "preprint_date",
+            "thesis_info.date",
+            "thesis_info.defense_date",
+            "publication_info.year",
+            "legacy_creation_date",
+            "imprints.date",
         ]
 
         dates = [
-            str(el) for el in chain.from_iterable(
+            str(el)
+            for el in chain.from_iterable(
                 [force_list(get_value(data, path)) for path in date_paths]
             )
         ]
@@ -85,3 +84,12 @@ class LiteratureEnhancedSchema(RecordSchema):
             result = earliest_date(dates)
             if result:
                 return result
+
+    def get_facet_inspire_doc_type(self, data):
+        result = []
+
+        result.extend(data.get("document_type", []))
+        result.extend(data.get("publication_type", []))
+        if "refereed" in data and data["refereed"]:
+            result.append("peer reviewed")
+        return result
