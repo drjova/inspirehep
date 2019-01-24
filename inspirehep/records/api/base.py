@@ -33,8 +33,12 @@ from invenio_pidstore.errors import PIDDoesNotExistError
 from invenio_pidstore.models import PersistentIdentifier, RecordIdentifier
 from invenio_records.models import RecordMetadata
 from invenio_records_files.api import Record
-from sqlalchemy import Text, cast, not_, or_, type_coerce
+from sqlalchemy import Text, cast, not_, or_, type_coerce, tuple_
 from sqlalchemy.dialects.postgresql import JSONB
+from inspire_utils.helpers import force_list
+from inspire_utils.record import get_value
+
+from ...pidstore.api import PidStoreBase
 
 
 class InspireQueryBuilder(object):
@@ -87,6 +91,18 @@ class InspireRecord(Record):
         return InspireQueryBuilder()
 
     @classmethod
+    def linked_records_in_field(cls, data, path):
+        # tec
+        full_path = ".".join([path, "$ref"])
+        pids = force_list(
+            [
+                PidStoreBase.get_pid_from_record_uri(rec)
+                for rec in get_value(data, full_path, [])
+            ]
+        )
+        return cls.get_records_from_pids(pids)
+
+    @classmethod
     def get_uuid_from_pid_value(cls, pid_value, pid_type=None):
         if not pid_type:
             pid_type = cls.pid_type
@@ -100,6 +116,32 @@ class InspireRecord(Record):
         record_uuid = cls.get_uuid_from_pid_value(pid_value)
         record = cls.get_record(record_uuid)
         return record
+
+    @classmethod
+    def get_uuids_from_pids(cls, pids):
+        """ (pid_type, pid_value)"""
+        query = (
+            cls.query_builder()
+            .query()
+            .with_entities(RecordMetadata.id)
+            .join(
+                PersistentIdentifier,
+                RecordMetadata.id == PersistentIdentifier.object_uuid,
+            )
+            .filter(
+                PersistentIdentifier.object_type == "rec",
+                tuple_(
+                    PersistentIdentifier.pid_type, PersistentIdentifier.pid_value
+                ).in_(pids),
+            )
+        )
+        for uuid in query.yield_per(100):
+            yield uuid
+
+    @classmethod
+    def get_records_from_pids(cls, pids):
+        uuids = cls.get_uuids_from_pids(pids)
+        return cls.get_records(uuids)
 
     @classmethod
     def create(cls, data, **kwargs):

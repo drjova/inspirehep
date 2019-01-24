@@ -34,11 +34,13 @@ class LiteratureEnhancedSchema(RecordSchema):
     authors = fields.Method("get_authors", dump_only=True)
     author_count = fields.Method("get_author_count", dump_only=True)
     earliest_date = fields.Method("get_earliest_date", dump_only=True)
+    # citation_count = fields.Method("get_citation_count", dump_only=True)
     facet_inspire_doc_type = fields.Method("get_facet_inspire_doc_type", dump_only=True)
+    # facet_author_name = fields.Method("get_facet_author_name", dump_only=True)
     number_of_references = fields.Method("get_number_of_references", dump_only=True)
 
     @staticmethod
-    def normilize_unicode(text):
+    def normalize_unicode(text):
         return normalize("NFKC", text).lower()
 
     @staticmethod
@@ -59,14 +61,11 @@ class LiteratureEnhancedSchema(RecordSchema):
         for index, author in enumerate(authors):
             full_name = author["full_name"]
             name_variations = LiteratureEnhancedSchema.name_variations(full_name)
+            normalized_name = LiteratureEnhancedSchema.normalize_unicode(full_name)
             authors[index].update(
                 {
-                    "full_name_unicode_normalized": LiteratureEnhancedSchema.normilize_unicode(
-                        full_name
-                    ),
-                    "name_variations": LiteratureEnhancedSchema.name_variations(
-                        full_name
-                    ),
+                    "full_name_unicode_normalized": normalized_name,
+                    "name_variations": name_variations,
                     "name_suggest": {
                         "input": [
                             variation for variation in name_variations if variation
