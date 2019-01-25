@@ -140,7 +140,9 @@ RECORDS_REST_ENDPOINTS = {
         search_serializers={
             "application/json": ("inspirehep.records.serializers" ":json_v1_search")
         },
-        record_loaders={"application/json": ("inspirehep.records.loaders" ":json_v1")},
+        record_loaders={
+            "application/json": ("inspirehep.records.loaders" ":record_schema")
+        },
         list_route="/literature/",
         item_route='/literature/<pid(lit,record_class="inspirehep.records.api.LiteratureRecord"):pid_value>',
         default_media_type="application/json",

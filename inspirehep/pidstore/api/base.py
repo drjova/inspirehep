@@ -137,7 +137,6 @@ class PidStoreBase(object):
 
     @staticmethod
     def get_pid_from_record_uri(uri):
-        """OMG"""
         parts = [part for part in uri.split("/") if part]
         try:
             pid_type = parts[-2][:3]

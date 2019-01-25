@@ -91,8 +91,7 @@ class InspireRecord(Record):
         return InspireQueryBuilder()
 
     @classmethod
-    def linked_records_in_field(cls, data, path):
-        # tec
+    def get_linked_records_in_field(cls, data, path):
         full_path = ".".join([path, "$ref"])
         pids = force_list(
             [
@@ -110,7 +109,7 @@ class InspireRecord(Record):
         return pid.object_uuid
 
     @classmethod
-    def get_record_by_pid_value(cls, pid_value, pid_type=None):
+    def get_record_from_pid_value(cls, pid_value, pid_type=None):
         if not pid_type:
             pid_type = cls.pid_type
         record_uuid = cls.get_uuid_from_pid_value(pid_value)
@@ -118,30 +117,17 @@ class InspireRecord(Record):
         return record
 
     @classmethod
-    def get_uuids_from_pids(cls, pids):
-        """ (pid_type, pid_value)"""
-        query = (
-            cls.query_builder()
-            .query()
-            .with_entities(RecordMetadata.id)
-            .join(
-                PersistentIdentifier,
-                RecordMetadata.id == PersistentIdentifier.object_uuid,
-            )
-            .filter(
-                PersistentIdentifier.object_type == "rec",
-                tuple_(
-                    PersistentIdentifier.pid_type, PersistentIdentifier.pid_value
-                ).in_(pids),
-            )
-        )
-        for uuid in query.yield_per(100):
-            yield uuid
-
-    @classmethod
     def get_records_from_pids(cls, pids):
-        uuids = cls.get_uuids_from_pids(pids)
-        return cls.get_records(uuids)
+        query = RecordMetadata.query.join(
+            PersistentIdentifier, RecordMetadata.id == PersistentIdentifier.object_uuid
+        ).filter(
+            PersistentIdentifier.object_type == "rec",
+            tuple_(PersistentIdentifier.pid_type, PersistentIdentifier.pid_value).in_(
+                pids
+            ),
+        )
+        for data in query.yield_per(100):
+            yield cls(data.json)
 
     @classmethod
     def create(cls, data, **kwargs):
@@ -180,7 +166,7 @@ class InspireRecord(Record):
     def create_or_update(cls, data, **kwargs):
         control_number = data.get("control_number")
         try:
-            record = cls.get_record_by_pid_value(control_number)
+            record = cls.get_record_from_pid_value(control_number)
             record.update(data)
         except PIDDoesNotExistError:
             record = cls.create(data, **kwargs)

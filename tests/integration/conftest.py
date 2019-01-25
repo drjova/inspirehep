@@ -112,7 +112,7 @@ def create_record(db, es_clear):
 
     def _create_record(record_type, data=None, with_pid=True, with_indexing=False):
         # FIXME: find a better location
-        MAP_PID_TYPE_TO_INDEX = {"lit": "records-hep"}
+        MAP_PID_TYPE_TO_INDEX = {"lit": "records-hep", "aut": "records-aut"}
 
         control_number = random.randint(1, 2147483647)
         record = RecordMetadataFactory(data=data, control_number=control_number)
