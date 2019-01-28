@@ -19,6 +19,9 @@ from inspire_utils.date import earliest_date
 from inspire_utils.record import get_value
 from inspire_utils.helpers import force_list
 from inspire_utils.name import generate_name_variations, ParsedName
+from inspire_utils.record import get_values_for_schema
+
+from ..api import LiteratureRecord
 
 from . import RecordSchema
 
@@ -36,7 +39,7 @@ class LiteratureEnhancedSchema(RecordSchema):
     earliest_date = fields.Method("get_earliest_date", dump_only=True)
     # citation_count = fields.Method("get_citation_count", dump_only=True)
     facet_inspire_doc_type = fields.Method("get_facet_inspire_doc_type", dump_only=True)
-    # facet_author_name = fields.Method("get_facet_author_name", dump_only=True)
+    facet_author_name = fields.Method("get_facet_author_name", dump_only=True)
     number_of_references = fields.Method("get_number_of_references", dump_only=True)
 
     @staticmethod
@@ -121,3 +124,37 @@ class LiteratureEnhancedSchema(RecordSchema):
 
         if references is not None:
             return len(references)
+
+    def _get_author_display_name(self, data):
+        parsed_name = ParsedName.loads(data)
+        return " ".join(parsed_name.first_list + parsed_name.last_list)
+
+    def _get_author_with_record_facet_author_name(self, data):
+        author_ids = data.get("ids", [])
+        author_bai = get_values_for_schema(author_ids, "INSPIRE BAI")
+        bai = author_bai[0] if author_bai else "BAI"
+        author_preferred_name = get_value(data, "name.preferred_name")
+        if author_preferred_name:
+            return "{}_{}".format(bai, author_preferred_name)
+        else:
+            return "{}_{}".format(
+                bai, self.get_author_display_name(data["name"]["value"])
+            )
+
+    def get_facet_author_name(self, data):
+        authors_with_record = LiteratureRecord.get_linked_records_in_field(
+            data, "authors.record"
+        )
+        authors_without_record = [
+            author for author in data.get("authors", []) if "record" not in author
+        ]
+        result = []
+
+        for author in authors_with_record:
+            result.append(self.get_author_with_record_facet_author_name(author))
+
+        for author in authors_without_record:
+            result.append(
+                "BAI_{}".format(self.get_author_display_name(author["full_name"]))
+            )
+        return result
