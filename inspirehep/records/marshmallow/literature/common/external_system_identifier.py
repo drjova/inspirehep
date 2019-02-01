@@ -6,7 +6,7 @@
 # the terms of the MIT License; see LICENSE file for more details.
 
 
-from marshmallow import Schema, post_dump, fields, missing
+from marshmallow import Schema, fields, missing, post_dump
 
 
 class ExternalSystemIdentifierSchemaV1(Schema):

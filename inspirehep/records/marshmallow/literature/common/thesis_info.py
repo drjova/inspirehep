@@ -5,9 +5,8 @@
 # inspirehep is free software; you can redistribute it and/or modify it under
 # the terms of the MIT License; see LICENSE file for more details.
 
-from marshmallow import Schema, fields, missing
-
 from inspire_utils.date import format_date
+from marshmallow import Schema, fields, missing
 
 
 class ThesisInfoSchemaV1(Schema):

@@ -5,7 +5,7 @@
 # inspirehep is free software; you can redistribute it and/or modify it under
 # the terms of the MIT License; see LICENSE file for more details.
 
-from marshmallow import Schema, pre_dump, fields
+from marshmallow import Schema, fields, pre_dump
 
 from inspirehep.pidstore.api import PidStoreBase
 from inspirehep.records.api import InspireRecord

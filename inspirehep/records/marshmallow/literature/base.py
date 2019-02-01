@@ -9,11 +9,15 @@
 from inspire_dojson.utils import strip_empty_values
 from inspire_utils.date import format_date
 from invenio_records_rest.schemas.json import RecordSchemaJSONV1
-from marshmallow import Schema, fields, post_dump, missing
+from marshmallow import Schema, fields, missing, post_dump
 
 from ..fields import ListWithLimit, NestedWithoutEmptyObjects
 from .common import (
+    AcceleratorExperimentSchemaV1,
     AuthorSchemaV1,
+    CitationItemSchemaV1,
+    CollaborationSchemaV1,
+    CollaborationWithSuffixSchemaV1,
     ConferenceInfoItemSchemaV1,
     DOISchemaV1,
     ExternalSystemIdentifierSchemaV1,
@@ -22,10 +26,6 @@ from .common import (
     ReferenceItemSchemaV1,
     SupervisorSchemaV1,
     ThesisInfoSchemaV1,
-    CitationItemSchemaV1,
-    CollaborationWithSuffixSchemaV1,
-    CollaborationSchemaV1,
-    AcceleratorExperimentSchemaV1,
 )
 
 

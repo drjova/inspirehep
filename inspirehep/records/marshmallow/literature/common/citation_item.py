@@ -5,16 +5,10 @@
 # inspirehep is free software; you can redistribute it and/or modify it under
 # the terms of the MIT License; see LICENSE file for more details.
 
-# FIXME LATER
+from inspire_dojson.utils import strip_empty_values
 from marshmallow import Schema, fields, post_dump
 
-from inspire_dojson.utils import strip_empty_values
-
-from inspirehep.modules.records.serializers.fields import (
-    ListWithLimit,
-    NestedWithoutEmptyObjects,
-)
-
+from ...fields import ListWithLimit, NestedWithoutEmptyObjects
 from .author import AuthorSchemaV1
 from .collaboration import CollaborationSchemaV1
 from .collaboration_with_suffix import CollaborationWithSuffixSchemaV1

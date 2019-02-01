@@ -5,13 +5,11 @@
 # inspirehep is free software; you can redistribute it and/or modify it under
 # the terms of the MIT License; see LICENSE file for more details.
 
+from inspire_dojson.utils import get_recid_from_ref
+from inspire_utils.helpers import force_list
+from inspire_utils.record import get_value
 from marshmallow import Schema, fields, missing, pre_dump
 
-from marshmallow import Schema, pre_dump, fields
-
-from inspire_dojson.utils import get_recid_from_ref
-from inspire_utils.record import get_value
-from inspire_utils.helpers import force_list
 from inspirehep.modules.records.utils import get_linked_records_in_field
 
 

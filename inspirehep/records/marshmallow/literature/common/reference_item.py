@@ -5,17 +5,17 @@
 # inspirehep is free software; you can redistribute it and/or modify it under
 # the terms of the MIT License; see LICENSE file for more details.
 
-from marshmallow import Schema, pre_dump, post_dump, fields, missing
 from inspire_dojson.utils import get_recid_from_ref, strip_empty_values
 from inspire_utils.helpers import force_list
 from inspire_utils.record import get_value
+from marshmallow import Schema, fields, missing, post_dump, pre_dump
 
 # FIXME
-from inspirehep.modules.records.serializers.fields import (
+from inspirehep.modules.records.utils import get_linked_records_in_field
+from inspirehep.records.marshmallow.fields import (
     ListWithLimit,
     NestedWithoutEmptyObjects,
 )
-from inspirehep.modules.records.utils import get_linked_records_in_field
 
 from .author import AuthorSchemaV1
 from .collaboration import CollaborationSchemaV1

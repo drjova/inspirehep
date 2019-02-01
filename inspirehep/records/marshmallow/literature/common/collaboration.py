@@ -5,10 +5,9 @@
 # inspirehep is free software; you can redistribute it and/or modify it under
 # the terms of the MIT License; see LICENSE file for more details.
 
+import re
 
 from marshmallow import Schema, fields, pre_dump
-
-import re
 
 
 class CollaborationSchemaV1(Schema):
