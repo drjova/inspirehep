@@ -102,6 +102,19 @@ class InspireRecord(Record):
         return record
 
     @classmethod
+    def get_records_by_pids(cls, pids):
+        query = RecordMetadata.query.join(
+            PersistentIdentifier, RecordMetadata.id == PersistentIdentifier.object_uuid
+        ).filter(
+            PersistentIdentifier.object_type == "rec",
+            tuple_(PersistentIdentifier.pid_type, PersistentIdentifier.pid_value).in_(
+                pids
+            ),
+        )
+        for data in query.yield_per(100):
+            yield cls(data.json)
+
+    @classmethod
     def create(cls, data, **kwargs):
         id_ = uuid.uuid4()
         data = cls.strip_empty_values(data)
@@ -109,6 +122,17 @@ class InspireRecord(Record):
             cls.mint(id_, data)
             record = super().create(data, id_=id_, **kwargs)
         return record
+
+    @classmethod
+    def get_linked_records_in_field(cls, data, path):
+        full_path = ".".join([path, "$ref"])
+        pids = force_list(
+            [
+                PidStoreBase.get_pid_from_record_uri(rec)
+                for rec in get_value(data, full_path, [])
+            ]
+        )
+        return cls.get_records_by_pids(pids)
 
     def update(self, data):
         with db.session.begin_nested():
