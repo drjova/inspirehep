@@ -10,7 +10,7 @@ from inspire_utils.helpers import force_list
 from inspire_utils.record import get_value
 from marshmallow import Schema, fields, missing, pre_dump
 
-from inspirehep.modules.records.utils import get_linked_records_in_field
+from inspirehep.records.api import InspireRecord
 
 
 class AcceleratorExperimentSchemaV1(Schema):
@@ -32,7 +32,7 @@ class AcceleratorExperimentSchemaV1(Schema):
 
     def get_control_numbers_to_resolved_experiments_map(self, data):
         data = force_list(data)
-        resolved_records = get_linked_records_in_field(
+        resolved_records = InspireRecord.get_linked_records_in_field(
             {"accelerator_experiments": data}, "accelerator_experiments.record"
         )
         return {record["control_number"]: record for record in resolved_records}
