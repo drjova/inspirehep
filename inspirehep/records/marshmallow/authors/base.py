@@ -9,7 +9,7 @@ from inspire_dojson.utils import strip_empty_values
 from invenio_records_rest.schemas.json import RecordSchemaJSONV1
 from marshmallow import Schema, fields, post_dump
 
-from .common import PositionSchemaV1, FacetAuthorNameSchemaV1
+from .common import FacetAuthorNameSchemaV1, PositionSchemaV1
 
 
 class AuthorsMetadataSchemaV1(Schema):

@@ -5,9 +5,9 @@
 # inspirehep is free software; you can redistribute it and/or modify it under
 # the terms of the MIT License; see LICENSE file for more details.
 
-from marshmallow import Schema, fields, missing
 from inspire_utils.name import ParsedName
 from inspire_utils.record import get_value, get_values_for_schema
+from marshmallow import Schema, fields, missing
 
 
 class FacetAuthorNameSchemaV1(Schema):
