@@ -7,14 +7,3 @@
 # the terms of the MIT License; see LICENSE file for more details.
 
 import pytest
-from helpers.providers.faker import faker
-
-from inspirehep.records.marshmallow.common.author import AuthorSchema
-
-
-def test_author():
-    data = {}
-
-
-def test_author_empty():
-    data = {}

@@ -9,10 +9,10 @@ from inspire_dojson.utils import strip_empty_values
 from invenio_records_rest.schemas.json import RecordSchemaJSONV1
 from marshmallow import Schema, fields, post_dump
 
-# FIXME
-from inspirehep.modules.records.utils import get_author_with_record_facet_author_name
-
 from .common import PositionSchemaV1
+
+# FIXME
+# from inspirehep.modules.records.utils import get_author_with_record_facet_author_name
 
 
 class AuthorsMetadataSchemaV1(Schema):

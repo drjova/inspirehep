@@ -14,8 +14,4 @@ json_v1 instance, it uses the MetadataSchemaV1, defining the
 PersistentIdentifier field.
 """
 
-from invenio_records_rest.loaders.marshmallow import marshmallow_loader
-
-from ..marshmallow.literature import LiteratureSchemaV1
-
-literature_json_v1 = marshmallow_loader(LiteratureSchemaV1)
+from .json import literature_json_v1

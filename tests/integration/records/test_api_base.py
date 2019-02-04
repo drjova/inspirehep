@@ -309,4 +309,5 @@ def test_get_linked_records_in_field_with_different_pid_types(
     result = list(result)
 
     assert expected_result_len == len(result)
-    assert expected_result == result
+    for record in result:
+        assert record in expected_result

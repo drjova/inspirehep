@@ -28,15 +28,15 @@ import uuid
 
 from inspire_dojson.utils import strip_empty_values
 from inspire_schemas.api import validate as schema_validate
+from inspire_utils.helpers import force_list
+from inspire_utils.record import get_value
 from invenio_db import db
 from invenio_pidstore.errors import PIDDoesNotExistError
 from invenio_pidstore.models import PersistentIdentifier, RecordIdentifier
 from invenio_records.models import RecordMetadata
 from invenio_records_files.api import Record
-from sqlalchemy import Text, cast, not_, or_, type_coerce, tuple_
+from sqlalchemy import Text, cast, not_, or_, tuple_, type_coerce
 from sqlalchemy.dialects.postgresql import JSONB
-from inspire_utils.helpers import force_list
-from inspire_utils.record import get_value
 
 from ...pidstore.api import PidStoreBase
 
