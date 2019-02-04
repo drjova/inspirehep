@@ -9,10 +9,7 @@ from inspire_dojson.utils import strip_empty_values
 from invenio_records_rest.schemas.json import RecordSchemaJSONV1
 from marshmallow import Schema, fields, post_dump
 
-from .common import PositionSchemaV1
-
-# FIXME
-# from inspirehep.modules.records.utils import get_author_with_record_facet_author_name
+from .common import PositionSchemaV1, FacetAuthorNameSchemaV1
 
 
 class AuthorsMetadataSchemaV1(Schema):
@@ -33,19 +30,14 @@ class AuthorsMetadataSchemaV1(Schema):
     name = fields.Raw(dump_only=True)
     new_record = fields.Raw(dump_only=True)
     positions = fields.Nested(PositionSchemaV1, dump_only=True, many=True)
-    should_display_positions = fields.Method("get_should_display_positions")
+    should_display_positions = fields.Method(
+        "get_should_display_positions", dump_only=True
+    )
     project_membership = fields.Raw(dump_only=True)
     status = fields.Raw(dump_only=True)
     stub = fields.Raw(dump_only=True)
     urls = fields.Raw(dump_only=True)
-    facet_author_name = fields.Method("get_facet_author_name")
-
-    @staticmethod
-    def get_facet_author_name(data):
-        if "facet_author_name" not in data:
-            return get_author_with_record_facet_author_name(data)
-        else:
-            return data["facet_author_name"]
+    facet_author_name = fields.Nested(FacetAuthorNameSchemaV1, dump_only=True)
 
     @staticmethod
     def get_should_display_positions(data):
