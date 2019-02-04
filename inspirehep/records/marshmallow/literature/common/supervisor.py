@@ -12,7 +12,7 @@ from .author import AuthorSchemaV1
 
 class SupervisorSchemaV1(AuthorSchemaV1):
     @pre_dump
-    def filter(self, data):
+    def pre_filter(self, data):
         if "inspire_roles" not in data:
             return {}
         elif "supervisor" not in data.get("inspire_roles", ["author"]):

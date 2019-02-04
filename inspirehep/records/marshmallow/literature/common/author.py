@@ -41,7 +41,7 @@ class AuthorSchemaV1(Schema):
         return missing
 
     @pre_dump
-    def filter(self, data):
+    def pre_filter(self, data):
         if "inspire_roles" in data:
             if "supervisor" in data.get("inspire_roles", ["author"]):
                 return {}
