@@ -24,11 +24,8 @@ class ConferenceInfoItemSchemaV1(Schema):
         _, recid = PidStoreBase.get_pid_type_from_endpoint(
             conference_record.get("$ref")
         )
-        try:
-            conference = InspireRecord.get_record_by_pid_value(recid, "con")
-        # FIXME : add a proper error
-        except Exception:
-            return {}
+
+        conference = InspireRecord.get_record_by_pid_value(recid, "con")
 
         titles = conference.get("titles")
         if titles is None:
