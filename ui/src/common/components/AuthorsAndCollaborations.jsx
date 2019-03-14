@@ -14,13 +14,16 @@ class AuthorsAndCollaborations extends Component {
   renderAuthorList(wrapperClassName, limit) {
     const { authors, authorCount, enableAuthorsShowAll } = this.props;
     return (
-      <AuthorList
-        wrapperClassName={wrapperClassName}
-        limit={limit}
-        total={authorCount}
-        authors={authors}
-        enableShowAll={enableAuthorsShowAll}
-      />
+      <Fragment>
+        <AuthorList
+          wrapperClassName={wrapperClassName}
+          limit={limit}
+          total={authorCount}
+          authors={authors}
+          enableShowAll={enableAuthorsShowAll}
+        />
+        <span> (2019)</span>
+      </Fragment>
     );
   }
 

@@ -3,11 +3,8 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Map } from 'immutable';
 
-import LiteratureDate from './LiteratureDate';
 import ArxivEprintList from './ArxivEprintList';
 import AuthorsAndCollaborations from '../../common/components/AuthorsAndCollaborations';
-import DOIList from './DOIList';
-import PartialAbstract from './PartialAbstract/PartialAbstract';
 import PublicationInfoList from '../../common/components/PublicationInfoList';
 import ArxivPdfDownloadAction from './ArxivPdfDownloadAction';
 import CiteModalAction from './CiteModalAction';
@@ -30,18 +27,16 @@ class LiteratureItem extends Component {
     const citationCount = metadata.get('citation_count', 0);
     const authorCount = metadata.get('number_of_authors');
 
-    const date = metadata.get('date');
     const publicationInfo = metadata.get('publication_info');
     const eprints = metadata.get('arxiv_eprints');
-    const dois = metadata.get('dois');
     const collaborations = metadata.get('collaborations');
     const collaborationsWithSuffix = metadata.get('collaborations_with_suffix');
-    const abstract = metadata.getIn(['abstracts', 0, 'value']);
 
     return (
       <ResultItem
         leftActions={
           <Fragment>
+            {arxivId && <ArxivPdfDownloadAction arxivId={arxivId} />}
             {arxivId && <ArxivPdfDownloadAction arxivId={arxivId} />}
             <CiteModalAction recordId={recordId} />
             <EditRecordActionContainer recordId={recordId} />
@@ -61,11 +56,11 @@ class LiteratureItem extends Component {
           </Fragment>
         }
       >
-        <Link className="f4" to={`${LITERATURE}/${recordId}`}>
+        <Link className="f5 link-gray" to={`${LITERATURE}/${recordId}`}>
           <LiteratureTitle title={title} />
         </Link>
-        <div className="mt2">
-          <div>
+        <div className="mt1">
+          <div className="test-inlne">
             <AuthorsAndCollaborations
               authorCount={authorCount}
               authors={authors}
@@ -73,13 +68,10 @@ class LiteratureItem extends Component {
               collaborationsWithSuffix={collaborationsWithSuffix}
             />
           </div>
-          <LiteratureDate date={date} />
-        </div>
-        <div className="mt2">
-          <PublicationInfoList publicationInfo={publicationInfo} />
-          <ArxivEprintList eprints={eprints} />
-          <DOIList dois={dois} />
-          <PartialAbstract abstract={abstract} />
+          <div className="test mt1">
+            <PublicationInfoList publicationInfo={publicationInfo} />
+            <ArxivEprintList eprints={eprints} />
+          </div>
         </div>
       </ResultItem>
     );

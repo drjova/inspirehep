@@ -67,7 +67,7 @@ class DetailPage extends Component {
     return (
       <Fragment>
         <Row type="flex" justify="center">
-          <Col className="mv3" xs={24} md={21} lg={19} xl={18}>
+          <Col className="mv2" xs={24} md={21} lg={19} xl={18}>
             <ContentBox loading={loading}>
               <Alert
                 type="info"

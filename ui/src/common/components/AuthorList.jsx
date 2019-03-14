@@ -30,22 +30,18 @@ class AuthorList extends Component {
     const { enableShowAll, authors } = this.props;
     if (enableShowAll) {
       return (
-        <div className="di pl1">
+        <span className="di pl1">
           <SecondaryButton onClick={this.onModalOpen}>
             Show All({authors.size})
           </SecondaryButton>
-        </div>
+        </span>
       );
     }
     return <span> et al.</span>;
   }
 
   renderAuthorList(authorsToDisplay, displayShowAll = true) {
-    const {
-      authors,
-      limit,
-      wrapperClassName,
-    } = this.props;
+    const { authors, limit, wrapperClassName } = this.props;
     return (
       <InlineList
         wrapperClassName={wrapperClassName}
@@ -56,9 +52,7 @@ class AuthorList extends Component {
             : null
         }
         extractKey={author => author.get('full_name')}
-        renderItem={author => (
-          <Author author={author} />
-        )}
+        renderItem={author => <Author author={author} />}
       />
     );
   }
