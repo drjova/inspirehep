@@ -204,15 +204,8 @@ class LiteratureSearchUISchemaV1(RecordSchemaJSONV1):
             return {}
 
 
-class LiteratureESEnhancementV1(
-    InspireBaseSchema, LiteratureMetadataRawAdminSchemaV1, PopulateRecidMixin
-):
+class LiteratureESEnhancementV1(LiteratureMetadataRawAdminSchemaV1):
     """Elasticsearch serialzier"""
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        InspireBaseSchema.__init__(self, *args, **kwargs)
-        PopulateRecidMixin.__init__(self, *args, **kwargs)
 
     _created = fields.DateTime(dump_only=True, attribute="created")
     _updated = fields.DateTime(dump_only=True, attribute="updated")

@@ -108,7 +108,6 @@ def test_literature_application_json_post(api_client, db):
     assert expected_status_code == response_status_code
 
 
-@pytest.mark.xfail(reason="references.``recid`` is missing from ES serializer")
 def test_literature_citations(api_client, db, es_clear, create_record):
     record = create_record("lit")
     record_control_number = record["control_number"]
@@ -116,12 +115,12 @@ def test_literature_citations(api_client, db, es_clear, create_record):
     data = {
         "references": [
             {
-                "recid": record_control_number,
                 "record": {
                     "$ref": f"http://localhost:5000/api/literature/{record_control_number}"
-                },
+                }
             }
-        ]
+        ],
+        "publication_info": [{"year": 2019}],
     }
     record_citing = create_record("lit", data=data)
     record_citing_control_number = record_citing["control_number"]
@@ -135,6 +134,8 @@ def test_literature_citations(api_client, db, es_clear, create_record):
                 {
                     "control_number": record_citing_control_number,
                     "titles": record_citing_titles,
+                    "earliest_date": "2019-01-01",
+                    "publication_info": [{"year": 2019}],
                 }
             ],
         }
@@ -148,7 +149,6 @@ def test_literature_citations(api_client, db, es_clear, create_record):
     assert expected_data == response_data
 
 
-@pytest.mark.xfail(reason="references.``recid`` is missing from ES serializer")
 def test_literature_citations_with_superseded_citing_records(
     api_client, db, create_record, es_clear
 ):
@@ -165,36 +165,54 @@ def test_literature_citations_with_superseded_citing_records(
         ],
         "related_records": [
             {
-                "record": {"$ref": "https://link-to-commentor-record"},
+                "record": {"$ref": "https://link-to-commentor-record/1"},
                 "relation": "commented",
             },
-            {"record": {"$ref": "https://link-to-any-other-record"}},
+            {"record": {"$ref": "https://link-to-any-other-record/2"}},
         ],
+        "publication_info": [{"year": 2019}],
     }
     record_citing = create_record("lit", data=record_data)
     record_citing_control_number = record_citing["control_number"]
     record_citing_titles = record_citing["titles"]
 
     superseded_record_data = {
-        "references": [{"recid": record_control_number}],
+        "references": [
+            {
+                "record": {
+                    "$ref": f"http://localhost:5000/api/literature/{record_control_number}"
+                }
+            }
+        ],
         "related_records": [
             {
-                "record": {"$ref": "https://link-to-successor-record"},
+                "record": {"$ref": "https://link-to-successor-record/2"},
                 "relation": "successor",
             }
         ],
+        "publication_info": [{"year": 2019}],
     }
-    create_record("lit", data=superseded_record_data)
+    record_superseded = create_record("lit", data=superseded_record_data)
+    record_superseded_control_number = record_superseded["control_number"]
+    record_superseded_titles = record_superseded["titles"]
 
     expected_status_code = 200
     expected_data = {
         "metadata": {
-            "citation_count": 1,
+            "citation_count": 2,
             "citations": [
                 {
-                    "control_number": record_citing_control_number,
+                    "control_number": 3,
+                    "earliest_date": "2019-01-01",
+                    "publication_info": [{"year": 2019}],
+                    "titles": record_superseded_titles,
+                },
+                {
+                    "control_number": 2,
+                    "earliest_date": "2019-01-01",
+                    "publication_info": [{"year": 2019}],
                     "titles": record_citing_titles,
-                }
+                },
             ],
         }
     }
@@ -442,4 +460,3 @@ def test_literature_search_citeable_filter(api_client, db, create_record_factory
         response_data["hits"]["hits"][0]["metadata"]["control_number"]
         == citeable_paper.json["control_number"]
     )
-
