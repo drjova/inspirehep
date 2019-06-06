@@ -62,7 +62,7 @@ def test_jobs_search_json_get(api_client, db, create_record):
 def test_jobs_record_search_results(api_client, db, es_clear, create_record):
     record = create_record("job")
 
-    expected_metadata = record._dump_for_es()
+    expected_metadata = record.serialize_for_es()
     expected_results = 1
 
     result = api_client.get("/jobs")
