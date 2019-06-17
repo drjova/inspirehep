@@ -59,6 +59,30 @@ def test_minter_arxiv_eprints_empty(base_app, db, create_record_factory):
     assert expected_pids_len == result_pids_len
 
 
+def test_minter_arxiv_eprints_duplicate(base_app, db, create_record_factory):
+    arxiv_value_1 = faker.arxiv()
+    arxiv_value_2 = faker.arxiv()
+    data = {"arxiv_eprints": [{"value": arxiv_value_1}, {"value": arxiv_value_1}]}
+    record = create_record_factory("lit", data=data)
+    data = record.json
+
+    ArxivMinter.mint(record.id, data)
+
+    epxected_pid_value = arxiv_value_1
+    expected_pid_provider = "external"
+    expected_pid_status = PIDStatus.REGISTERED
+
+    result_pid = (
+        PersistentIdentifier.query.filter_by(object_uuid=record.id)
+        .filter_by(pid_type="arxiv")
+        .one()
+    )
+
+    assert expected_pid_provider == result_pid.pid_provider
+    assert expected_pid_status == result_pid.status
+    assert epxected_pid_value == result_pid.pid_value
+
+
 def test_mitner_arxiv_eprints_already_existing(base_app, db, create_record_factory):
     arxiv_value = faker.arxiv()
     data = {"arxiv_eprints": [{"value": arxiv_value}]}

@@ -5,6 +5,8 @@
 # inspirehep is free software; you can redistribute it and/or modify it under
 # the terms of the MIT License; see LICENSE file for more details.
 
+from inspire_utils.dedupers import dedupe_list
+from inspire_utils.helpers import force_list
 from inspire_utils.record import get_value
 
 from ..errors import MissingSchema
@@ -28,7 +30,10 @@ class Minter:
             raise MissingSchema
 
     def get_pid_values(self):
-        return get_value(self.data, self.pid_value_path, default=None)
+        pid_values = get_value(self.data, self.pid_value_path, default=None)
+        if not isinstance(pid_values, (tuple, list)):
+            pid_values = force_list(pid_values)
+        return dedupe_list(pid_values)
 
     @property
     def pid_value(self):
@@ -52,14 +57,7 @@ class Minter:
         minter.validate()
         pid_values = minter.get_pid_values()
 
-        if pid_values is None:
-            return
-
-        if isinstance(pid_values, (list, tuple)):
-            for pid_value in pid_values:
-                minter.create(pid_value)
-        else:
-            pid_value = data
+        for pid_value in pid_values:
             minter.create(pid_value)
         return minter
 

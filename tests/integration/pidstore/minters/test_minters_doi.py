@@ -43,6 +43,29 @@ def test_minter_dois(base_app, db, create_record_factory):
         assert pid.pid_value in epxected_pids_values
 
 
+def test_minter_dois_duplicate(base_app, db, create_record_factory):
+    doi_value_1 = faker.doi()
+    data = {"dois": [{"value": doi_value_1}, {"value": doi_value_1}]}
+    record = create_record_factory("lit", data=data)
+    data = record.json
+
+    DoiMinter.mint(record.id, data)
+
+    epxected_pid_value = doi_value_1
+    expected_pid_provider = "external"
+    expected_pid_status = PIDStatus.REGISTERED
+
+    result_pid = (
+        PersistentIdentifier.query.filter_by(object_uuid=record.id)
+        .filter_by(pid_type="doi")
+        .one()
+    )
+
+    assert expected_pids_provider == result_pid.pid_provider
+    assert expected_pids_status == result_pid.status
+    assert epxected_pid_value == result_pid.pid_value
+
+
 def test_minter_dois_empty(base_app, db, create_record_factory):
     record = create_record_factory("lit")
     data = record.json
