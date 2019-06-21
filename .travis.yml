@@ -39,7 +39,7 @@ services:
   - docker
 
 install:
-  - if [[ "$SUITE" != "ui" ]]; then  ./scripts/bootstrap; fi
+  - if [[ "$SUITE" != "ui" ]]; then pip install --editable .[all] --requirement requirements.txt --upgrade; fi
 
 before_install:
   - sudo service postgresql stop
@@ -62,7 +62,7 @@ after_success:
   - coveralls
 
 after_failure:
-  - if [[ "$SUITE" != "ui" ]]; then poetry show; fi
+  - if [[ "$SUITE" != "ui" ]]; then  pip freeze; fi
 
 before_script:
   - if [[ "$RUN_DOCKER" == "true" ]]; then ./docker/wait-for-services.sh; fi
@@ -70,7 +70,7 @@ before_script:
 script:
     - if [[ "$SUITE" == "unit" ]]; then  ./run-code-checks.sh; fi
     - if [[ "$SUITE" != "ui" ]]; then
-        poetry run py.test tests/${SUITE};
+        py.test tests/${SUITE};
       else
         cd ui && yarn && yarn test;
       fi
