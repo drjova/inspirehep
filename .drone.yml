@@ -1,0 +1,92 @@
+# -*- coding: utf-8 -*-
+#
+# Copyright (C) 2019 CERN.
+#
+# inspirehep is free software; you can redistribute it and/or modify it under
+# the terms of the MIT License; see LICENSE file for more details.
+
+kind: pipeline
+name: unit
+steps:
+  - name: unit
+    image: python:3.6
+    commands:
+    - pip install poetry
+    - poetry install
+    - ./run-code-checks.sh
+    - poetry run py.test tests/unit
+
+---
+
+kind: pipeline
+name: integration
+steps:
+  - name: integration
+    image: python:3.6
+    commands:
+      - pip install poetry
+      - poetry install
+      - poetry run py.test tests/integration
+    environment:
+      INVENIO_SQLALCHEMY_DATABASE_URI: 'postgresql+psycopg2://inspirehep@db:5432/inspirehep'
+      ELASTIC_HOSTS: 'es:9200'
+      INVENIO_CACHE_REDIS_URL: 'redis://cache:6379/0'
+      INVENIO_CACHE_TYPE: redis
+services:
+- name: db
+  image: postgres:9.6
+  environment:
+    POSTGRES_USER: inspirehep
+    POSTGRES_DB: inspirehep
+  ports:
+    - 5432
+- name: cache
+  image: redis
+  ports:
+    - 6379
+- name: es
+  image: elasticsearch:5.6
+  commands:
+    - bin/elasticsearch-plugin install analysis-icu
+    - bin/elasticsearch-plugin install analysis-phonetic
+    - bin/elasticsearch-plugin install -b ingest-attachment
+  ports:
+    - 9200
+
+---
+
+kind: pipeline
+name: integration-async
+steps:
+  - name: integration-async
+    image: python:3.6
+    commands:
+      - pip install poetry
+      - poetry install
+      - poetry run py.test tests/integration-async
+    environment:
+      INVENIO_SQLALCHEMY_DATABASE_URI: 'postgresql+psycopg2://inspirehep:inspirehep@db:5432/inspirehep'
+      ELASTIC_HOSTS: 'es:9200'
+      INVENIO_CACHE_REDIS_URL: 'redis://cache:6379/0'
+      INVENIO_CACHE_TYPE: redis
+services:
+- name: db
+  image: postgres:9.6
+  environment:
+    POSTGRES_USER: inspirehep
+    POSTGRES_DB: inspirehep
+  ports:
+    - 5432
+- name: cache
+  image: redis
+  ports:
+    - 6379
+- name: es
+  image: elasticsearch:5.6
+  commands:
+    - bin/elasticsearch-plugin install analysis-icu
+    - bin/elasticsearch-plugin install analysis-phonetic
+    - bin/elasticsearch-plugin install -b ingest-attachment
+  ports:
+    - 9200
+
