@@ -206,3 +206,9 @@ ALEMBIC_SKIP_TABLES = [
     "workflows_record_sources",
     "workflows_workflow",
 ]
+
+# Elasticsearch
+# =============
+
+if os.environ.get("ELASTIC_HOSTS"):
+    SEARCH_ELASTIC_HOSTS = [os.environ.get("ELASTIC_HOSTS")]
