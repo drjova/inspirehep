@@ -132,6 +132,24 @@ class LiteratureSubmissionResource(BaseSubmissionsResource):
         }
         payload = {"data": serialized_data, "form_data": form_data}
 
+        if submission_data.get("arxiv_id") and submission_data.get("doi"):
+            doi = submission_data["doi"]
+            try:
+                crossref_data = import_doi(doi)
+            except (ImportConnectionError, ImportParsingError):
+                LOGGER.exception("Cannot merge submission with CrossRef", doi=doi)
+
+            if crossref_data:
+                merged, conflicts = merge(
+                    root={}, head=payload["data"], update=crossref_data
+                )
+                payload["data"] = merged
+                if conflicts:
+                    LOGGER.debug(
+                        "Ignoring conflicts while enhancing submission.\n%r",
+                        conflicts=conflicts,
+                    )
+
         response = self.send_post_request_to_inspire_next(
             "/workflows/literature", payload
         )
