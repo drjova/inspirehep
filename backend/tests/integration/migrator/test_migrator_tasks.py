@@ -30,7 +30,7 @@ from inspirehep.search.api import LiteratureSearch
 
 
 @pytest.fixture
-def enable_orcid_push_feature(base_app, db, es):
+def enable_orcid_push_feature(app):
     with patch.dict(base_app.config, {"FEATURE_FLAG_ENABLE_ORCID_PUSH": True}):
         yield
 
@@ -46,7 +46,7 @@ def cleanup():
     )
 
 
-def test_migrate_and_insert_record_valid_record(base_app, db, es):
+def test_migrate_and_insert_record_valid_record(app):
     raw_record = (
         b"<record>"
         b'  <controlfield tag="001">12345</controlfield>'
@@ -68,7 +68,7 @@ def test_migrate_and_insert_record_valid_record(base_app, db, es):
     assert prod_record.marcxml == raw_record
 
 
-def test_migrate_and_insert_record_dojson_error(base_app, db, es):
+def test_migrate_and_insert_record_dojson_error(app):
     raw_record = (
         b"<record>"
         b'  <controlfield tag="001">12345</controlfield>'
@@ -90,7 +90,7 @@ def test_migrate_and_insert_record_dojson_error(base_app, db, es):
     assert prod_record.marcxml == raw_record
 
 
-def test_migrate_and_insert_record_invalid_record(base_app, db, es):
+def test_migrate_and_insert_record_invalid_record(app):
     raw_record = (
         b"<record>"
         b'  <controlfield tag="001">12345</controlfield>'
@@ -109,7 +109,7 @@ def test_migrate_and_insert_record_invalid_record(base_app, db, es):
     assert prod_record.marcxml == raw_record
 
 
-def test_migrate_and_insert_record_pidstore_error(base_app, db, es):
+def test_migrate_and_insert_record_pidstore_error(app):
     raw_record = (
         b"<record>"
         b'  <controlfield tag="001">12345</controlfield>'
@@ -197,7 +197,7 @@ def test_migrate_and_insert_record_invalid_record_update_regression(base_app, db
 
 
 @patch("inspirehep.records.api.InspireRecord.create_or_update", side_effect=Exception())
-def test_migrate_and_insert_record_other_exception(base_app, db, es):
+def test_migrate_and_insert_record_other_exception(app):
     raw_record = (
         b"<record>"
         b'  <controlfield tag="001">12345</controlfield>'
@@ -215,7 +215,7 @@ def test_migrate_and_insert_record_other_exception(base_app, db, es):
     assert prod_record.marcxml == raw_record
 
 
-def test_migrate_record_from_miror_steals_pids_from_deleted_records(base_app, db, es):
+def test_migrate_record_from_miror_steals_pids_from_deleted_records(app):
     raw_record = (
         b"<record>"
         b'  <controlfield tag="001">98765</controlfield>'
@@ -289,7 +289,7 @@ def test_orcid_push_disabled_on_migrate_from_mirror(
     assert base_app.config["FEATURE_FLAG_ENABLE_ORCID_PUSH"]
 
 
-def test_migrate_from_mirror_doesnt_index_deleted_records(base_app, db, es_clear):
+def test_migrate_from_mirror_doesnt_index_deleted_records(app_clear):
     record_fixture_path = pkg_resources.resource_filename(
         __name__, os.path.join("fixtures", "dummy.xml")
     )
@@ -311,9 +311,7 @@ def test_migrate_from_mirror_doesnt_index_deleted_records(base_app, db, es_clear
     assert expected_record_lit_es_len == record_lit_es_len
 
 
-def test_migrate_from_mirror_removes_record_from_es(
-    base_app, db, es_clear, datadir, create_record
-):
+def test_migrate_from_mirror_removes_record_from_es(app_clear, datadir, create_record):
     data = json.loads((datadir / "dummy_record.json").read_text())
     create_record("lit", data=data)
 
@@ -339,7 +337,7 @@ def test_migrate_from_mirror_removes_record_from_es(
 
 @patch("inspirehep.migrator.tasks.process_references_in_records")
 def test_migrate_records_with_all_makes_records_references_process_disabled(
-    proecess_references_mock, base_app, db, es_clear, datadir, create_record
+    proecess_references_mock, app_clear, datadir, create_record
 ):
     record_fixture_path = pkg_resources.resource_filename(
         __name__, os.path.join("fixtures", "dummy.xml")
@@ -352,7 +350,7 @@ def test_migrate_records_with_all_makes_records_references_process_disabled(
 
 @patch("inspirehep.migrator.tasks.process_references_in_records")
 def test_migrate_records_with_all_makes_records_references_process_enabled(
-    proecess_references_mock, base_app, db, es_clear, datadir, create_record
+    proecess_references_mock, app_clear, datadir, create_record
 ):
     record_fixture_path = pkg_resources.resource_filename(
         __name__, os.path.join("fixtures", "dummy.xml")
@@ -365,7 +363,7 @@ def test_migrate_records_with_all_makes_records_references_process_enabled(
 
 @patch("inspirehep.migrator.tasks.batch_index")
 def test_process_references_in_records_doesnt_call_batch_reindex_if_there_are_no_references(
-    batch_index_mock, base_app, db, es_clear, create_record
+    batch_index_mock, app_clear, create_record
 ):
     data = {
         "$schema": "http://localhost:5000/schemas/records/hep.json",
@@ -380,7 +378,7 @@ def test_process_references_in_records_doesnt_call_batch_reindex_if_there_are_no
 
 @patch("inspirehep.migrator.tasks.LiteratureRecord.get_modified_references")
 def test_process_references_in_records_doesnt_call_get_modified_references_for_non_lit_records(
-    get_modified_references_mock, base_app, db, es_clear, create_record
+    get_modified_references_mock, app_clear, create_record
 ):
     data = {
         "$schema": "https://inspire/schemas/records/authors.json",

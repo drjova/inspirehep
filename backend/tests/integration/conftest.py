@@ -309,3 +309,13 @@ def vcr_config():
         ),
         "record_mode": "once",
     }
+
+
+@pytest.fixture(scope="module")
+def app(base_app, es, database):
+    yield base_app
+
+
+@pytest.fixture(scope="function")
+def app_clear(base_app, db, es_clear):
+    yield base_app

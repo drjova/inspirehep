@@ -11,7 +11,7 @@ from inspirehep.records.models import RecordCitations
 from inspirehep.records.tasks import recalculate_record_citations
 
 
-def test_recalculate_record_citations(base_app, db, es_clear, create_record):
+def test_recalculate_record_citations(app_clear, create_record):
     data_cited_record_1 = faker.record("lit")
     cited_record_1 = create_record("lit", data=data_cited_record_1)
 
@@ -65,7 +65,7 @@ def test_recalculate_record_citations(base_app, db, es_clear, create_record):
 
 
 def test_recalculate_record_citations_with_no_literatrure_records(
-    base_app, db, es_clear, create_record
+    app_clear, create_record
 ):
     record_aut = create_record("aut")
     record_job = create_record("job")

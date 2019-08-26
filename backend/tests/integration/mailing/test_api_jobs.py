@@ -18,7 +18,7 @@ from inspirehep.mailing.api.jobs import (
 from inspirehep.records.api import InspireRecord
 
 
-def test_jobs_from_last_week(base_app, db, es_clear, create_jobs):
+def test_jobs_from_last_week(app_clear, create_jobs):
     expected_control_numbers = [1444586, 1468124, 1616162]
 
     results = get_jobs_from_last_week()
@@ -26,7 +26,7 @@ def test_jobs_from_last_week(base_app, db, es_clear, create_jobs):
     assert expected_control_numbers == results_control_numbers
 
 
-def test_jobs_from_last_week_empty(base_app, db, es_clear):
+def test_jobs_from_last_week_empty(app_clear):
     expected_control_numbers = []
 
     results = get_jobs_from_last_week()
@@ -34,7 +34,7 @@ def test_jobs_from_last_week_empty(base_app, db, es_clear):
 
 
 @pytest.mark.vcr()
-def test_send_jobs_weekly_campaign(base_app, db, es_clear, vcr_cassette):
+def test_send_jobs_weekly_campaign(app_clear, vcr_cassette):
     content = "<p>Breaking news from ALIAS Investigation.</p>"
 
     send_jobs_weekly_campaign(content)
@@ -42,17 +42,13 @@ def test_send_jobs_weekly_campaign(base_app, db, es_clear, vcr_cassette):
 
 
 @pytest.mark.vcr()
-def test_send_jobs_weekly_campaign_with_test_emails(
-    base_app, db, es_clear, vcr_cassette
-):
+def test_send_jobs_weekly_campaign_with_test_emails(app_clear, vcr_cassette):
     content = "<p>Breaking news from ALIAS Investigation.</p>"
     send_jobs_weekly_campaign(content, ["jessica@jones.com"])
     assert vcr_cassette.all_played
 
 
-def test_render_jobs_weekly_campaign_job_record_template_only(
-    base_app, db, es_clear, create_jobs
-):
+def test_render_jobs_weekly_campaign_job_record_template_only(app_clear, create_jobs):
     jobs = get_jobs_from_last_week()
     # Comparing strings is tricky especially with newlines, we're not going to test the whole template,
     # anyway it has a lot of extras from mailchimp and too much noise

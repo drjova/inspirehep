@@ -18,9 +18,7 @@ from inspirehep.records.api import InspireRecord
 
 
 @pytest.mark.vcr()
-def test_send_weekly_jobs(
-    app_cli_runner, base_app, db, es_clear, create_jobs, vcr_cassette
-):
+def test_send_weekly_jobs(app_cli_runner, app_clear, create_jobs, vcr_cassette):
     result = app_cli_runner.invoke(mailing, ["send_weekly_jobs"])
     assert result.exit_code == 0
     assert "Campaign sent" in result.output
@@ -43,9 +41,7 @@ def test_send_weekly_jobs_test(app_cli_runner, db, es_clear, create_jobs, vcr_ca
     assert vcr_cassette.all_played
 
 
-def test_send_weekly_jobs_api_missing_exception(
-    app_cli_runner, base_app, db, es_clear, create_jobs
-):
+def test_send_weekly_jobs_api_missing_exception(app_cli_runner, app_clear, create_jobs):
     with mock.patch.dict(base_app.config, {"MAILCHIMP_API_TOKEN": None}):
         result = app_cli_runner.invoke(mailing, ["send_weekly_jobs"])
         assert result.exit_code == -1

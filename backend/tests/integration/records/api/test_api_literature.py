@@ -24,7 +24,7 @@ from inspirehep.records.errors import ExistingArticleError, UnknownImportIdentif
 from inspirehep.records.models import RecordCitations
 
 
-def test_literature_create(base_app, db, es):
+def test_literature_create(app):
     data = faker.record("lit")
     record = LiteratureRecord.create(data)
 
@@ -41,7 +41,7 @@ def test_literature_create(base_app, db, es):
     assert control_number == record_pid.pid_value
 
 
-def test_literature_create_does_not_mint_if_record_is_deleted(base_app, db, es):
+def test_literature_create_does_not_mint_if_record_is_deleted(app):
     data = faker.record("lit", data={"deleted": True}, with_control_number=True)
     record = LiteratureRecord.create(data)
 
@@ -128,7 +128,7 @@ def test_literature_create_with_mutliple_updated_pids(base_app, db, create_pidst
     assert expected_pid_doi_value == record_doi_pid.pid_value
 
 
-def test_literature_on_delete(base_app, db, es_clear):
+def test_literature_on_delete(app_clear):
     doi_value = faker.doi()
     arxiv_value = faker.arxiv()
     data = {"arxiv_eprints": [{"value": arxiv_value}], "dois": [{"value": doi_value}]}
@@ -160,7 +160,7 @@ def test_literature_on_delete(base_app, db, es_clear):
     assert PIDStatus.DELETED == record_lit_pid.status
 
 
-def test_literature_on_delete_through_metadata_update(base_app, db, es_clear):
+def test_literature_on_delete_through_metadata_update(app_clear):
     doi_value = faker.doi()
     arxiv_value = faker.arxiv()
     data = {"arxiv_eprints": [{"value": arxiv_value}], "dois": [{"value": doi_value}]}
@@ -207,7 +207,7 @@ def test_literature_create_with_existing_control_number(base_app, db, create_pid
         LiteratureRecord.create(data)
 
 
-def test_literature_create_with_arxiv_eprints(base_app, db, es):
+def test_literature_create_with_arxiv_eprints(app):
     arxiv_value = faker.arxiv()
     data = {"arxiv_eprints": [{"value": arxiv_value}]}
     data = faker.record("lit", data=data)
@@ -231,7 +231,7 @@ def test_literature_create_with_arxiv_eprints(base_app, db, es):
     assert expected_arxiv_pid_provider == record_pid_arxiv.pid_provider
 
 
-def test_literature_create_with_dois(base_app, db, es):
+def test_literature_create_with_dois(app):
     doi_value = faker.doi()
     data = {"dois": [{"value": doi_value}]}
     data = faker.record("lit", data=data)
@@ -298,7 +298,7 @@ def test_literature_create_with_invalid_data_and_mutliple_pids(
     assert record_doi_pid is None
 
 
-def test_literature_update(base_app, db, es):
+def test_literature_update(app):
     data = faker.record("lit", with_control_number=True)
     record = LiteratureRecord.create(data)
 
@@ -319,7 +319,7 @@ def test_literature_update(base_app, db, es):
     assert control_number == record_updated_pid.pid_value
 
 
-def test_literature_create_or_update_with_new_record(base_app, db, es):
+def test_literature_create_or_update_with_new_record(app):
     data = faker.record("lit")
     record = LiteratureRecord.create_or_update(data)
 
@@ -336,7 +336,7 @@ def test_literature_create_or_update_with_new_record(base_app, db, es):
     assert control_number == record_pid.pid_value
 
 
-def test_literature_create_or_update_with_existing_record(base_app, db, es):
+def test_literature_create_or_update_with_existing_record(app):
     data = faker.record("lit", with_control_number=True)
     record = LiteratureRecord.create(data)
 
@@ -603,14 +603,14 @@ def test_subclasses_for_literature():
     assert expected == LiteratureRecord.get_subclasses()
 
 
-def test_get_record_from_db_depending_on_its_pid_type(base_app, db, es):
+def test_get_record_from_db_depending_on_its_pid_type(app):
     data = faker.record("lit")
     record = InspireRecord.create(data)
     record_from_db = InspireRecord.get_record(record.id)
     assert type(record_from_db) == LiteratureRecord
 
 
-def test_dump_for_es(base_app, db, es):
+def test_dump_for_es(app):
     additional_fields = {
         "preprint_date": "2016-01-01",
         "publication_info": [{"year": 2015}],
@@ -730,7 +730,7 @@ def test_add_and_remove_figs_and_docs_when_files_flag_disabled(
     assert record["documents"][0]["key"] == expected_doc_filename
 
 
-def test_create_record_from_db_depending_on_its_pid_type(base_app, db, es):
+def test_create_record_from_db_depending_on_its_pid_type(app):
     data = faker.record("lit")
     record = InspireRecord.create(data)
     assert type(record) == LiteratureRecord
@@ -741,7 +741,7 @@ def test_create_record_from_db_depending_on_its_pid_type(base_app, db, es):
     assert record.pid_type == "lit"
 
 
-def test_create_or_update_record_from_db_depending_on_its_pid_type(base_app, db, es):
+def test_create_or_update_record_from_db_depending_on_its_pid_type(app):
     data = faker.record("lit")
     record = InspireRecord.create_or_update(data)
     assert type(record) == LiteratureRecord
@@ -764,7 +764,7 @@ def test_import_article_bad_doi(base_app):
         import_article("doi:Th1s1s/n0taD01")
 
 
-def test_import_article_arxiv_id_already_in_inspire(base_app, db, es):
+def test_import_article_arxiv_id_already_in_inspire(app):
     arxiv_value = faker.arxiv()
     data = {"arxiv_eprints": [{"value": arxiv_value}]}
     data = faker.record("lit", with_control_number=True, data=data)
@@ -774,7 +774,7 @@ def test_import_article_arxiv_id_already_in_inspire(base_app, db, es):
         import_article(f"arXiv:{arxiv_value}")
 
 
-def test_import_article_doi_already_in_inspire(base_app, db, es):
+def test_import_article_doi_already_in_inspire(app):
     doi_value = faker.doi()
     data = {"dois": [{"value": doi_value}]}
     data = faker.record("lit", with_control_number=True, data=data)
@@ -784,7 +784,7 @@ def test_import_article_doi_already_in_inspire(base_app, db, es):
         import_article(doi_value)
 
 
-def test_create_record_update_citation_table(base_app, db, es):
+def test_create_record_update_citation_table(app):
     data = faker.record("lit")
     record = LiteratureRecord.create(data)
 
@@ -798,7 +798,7 @@ def test_create_record_update_citation_table(base_app, db, es):
     assert len(RecordCitations.query.all()) == 1
 
 
-def test_update_record_update_citation_table(base_app, db, es):
+def test_update_record_update_citation_table(app):
     data = faker.record("lit")
     record = LiteratureRecord.create(data)
 
@@ -818,7 +818,7 @@ def test_update_record_update_citation_table(base_app, db, es):
     assert len(RecordCitations.query.all()) == 1
 
 
-def test_complex_records_interactions_in_citation_table(base_app, db, es):
+def test_complex_records_interactions_in_citation_table(app):
     records_list = []
     for i in range(6):
         data = faker.record(
@@ -846,7 +846,7 @@ def test_complex_records_interactions_in_citation_table(base_app, db, es):
     assert len(records_list[5].model.references) == 5
 
 
-def test_literature_can_cite_data_record(base_app, db, es):
+def test_literature_can_cite_data_record(app):
     data = faker.record("dat")
     record = InspireRecord.create(data)
 
@@ -860,7 +860,7 @@ def test_literature_can_cite_data_record(base_app, db, es):
     assert len(RecordCitations.query.all()) == 1
 
 
-def test_literature_cannot_cite_other_than_data_and_literature_record(base_app, db, es):
+def test_literature_cannot_cite_other_than_data_and_literature_record(app):
     author = InspireRecord.create(faker.record("aut"))
     conference = InspireRecord.create(faker.record("con"))
     experiment = InspireRecord.create(faker.record("exp"))
@@ -886,7 +886,7 @@ def test_literature_cannot_cite_other_than_data_and_literature_record(base_app, 
     assert len(RecordCitations.query.all()) == 0
 
 
-def test_literature_can_cite_only_existing_records(base_app, db, es):
+def test_literature_can_cite_only_existing_records(app):
     data = faker.record("dat")
     record = InspireRecord.create(data)
 
@@ -900,7 +900,7 @@ def test_literature_can_cite_only_existing_records(base_app, db, es):
     assert len(RecordCitations.query.all()) == 1
 
 
-def test_literature_is_not_cited_by_deleted_records(base_app, db, es_clear):
+def test_literature_is_not_cited_by_deleted_records(app_clear):
     data = faker.record("lit")
     record = InspireRecord.create(data)
 
@@ -921,7 +921,7 @@ def test_literature_is_not_cited_by_deleted_records(base_app, db, es_clear):
     assert len(RecordCitations.query.all()) == 0
 
 
-def test_literature_citation_count_property(base_app, db, es):
+def test_literature_citation_count_property(app):
     data = faker.record("lit")
     record = InspireRecord.create(data)
 
@@ -966,7 +966,7 @@ def test_record_create_not_run_orcid_when_passed_parameter_to_disable_orcid(
 
 
 @mock.patch("inspirehep.records.api.literature.push_to_orcid")
-def test_record_create_not_skips_orcid_on_default(orcid_mock, base_app, db, es):
+def test_record_create_not_skips_orcid_on_default(orcid_mock, app):
     data1 = faker.record("lit")
     record1 = InspireRecord.create(data1)
     assert orcid_mock.call_count == 1
@@ -1006,7 +1006,7 @@ def test_record_update_not_run_orcid_when_passed_parameter_to_disable_orcid(
 
 
 @mock.patch("inspirehep.records.api.literature.push_to_orcid")
-def test_record_update_not_skips_orcid_on_default(orcid_mock, base_app, db, es):
+def test_record_update_not_skips_orcid_on_default(orcid_mock, app):
     data1 = faker.record("lit")
     data2 = faker.record("lit")
     record1 = InspireRecord.create(data1)
@@ -1040,7 +1040,7 @@ def test_record_update_runs_citation_recalculate_on_default(
     assert citation_recalculate_mock.call_count == 2
 
 
-def test_get_modified_references(base_app, db, es_clear):
+def test_get_modified_references(app_clear):
     cited_data = faker.record("lit")
     cited_record_1 = InspireRecord.create(cited_data)
 
@@ -1075,7 +1075,7 @@ def test_get_modified_references(base_app, db, es_clear):
 
 @mock.patch("inspirehep.records.api.literature.uuid.uuid4")
 def test_update_authors_signature_blocks_handles_ascii_names(
-    mock_uuid4, base_app, db, es_clear, redis
+    mock_uuid4, app_clear, redis
 ):
     mock_uuid4.return_value = UUID("727238f3-8ed6-40b6-97d2-dc3cd1429131")
     author_data = {"authors": [{"full_name": "Ellis, John Richard"}]}
@@ -1095,7 +1095,7 @@ def test_update_authors_signature_blocks_handles_ascii_names(
 
 @mock.patch("inspirehep.records.api.literature.uuid.uuid4")
 def test_update_authors_signature_blocks_handles_unicode_names(
-    mock_uuid4, base_app, db, es_clear, redis
+    mock_uuid4, app_clear, redis
 ):
     mock_uuid4.return_value = UUID("727238f3-8ed6-40b6-97d2-dc3cd1429131")
     author_data = {"authors": [{"full_name": "Páramos, Jorge"}]}
@@ -1114,9 +1114,7 @@ def test_update_authors_signature_blocks_handles_unicode_names(
 
 
 @mock.patch("inspirehep.records.api.literature.uuid.uuid4")
-def test_update_authors_signature_blocks_handles_jimmy(
-    mock_uuid4, base_app, db, es_clear, redis
-):
+def test_update_authors_signature_blocks_handles_jimmy(mock_uuid4, app_clear, redis):
     mock_uuid4.return_value = UUID("727238f3-8ed6-40b6-97d2-dc3cd1429131")
     author_data = {"authors": [{"full_name": "Jimmy"}]}
     data = faker.record("lit", data=author_data)
@@ -1135,7 +1133,7 @@ def test_update_authors_signature_blocks_handles_jimmy(
 
 @mock.patch("inspirehep.records.api.literature.uuid.uuid4")
 def test_update_authors_signature_blocks_handles_two_authors_with_the_same_name(
-    mock_uuid4, base_app, db, es_clear, redis
+    mock_uuid4, app_clear, redis
 ):
     mock_uuid4.return_value = UUID("727238f3-8ed6-40b6-97d2-dc3cd1429131")
     author_data = {"authors": [{"full_name": "Jimmy"}]}
@@ -1155,7 +1153,7 @@ def test_update_authors_signature_blocks_handles_two_authors_with_the_same_name(
 
 @mock.patch("inspirehep.records.api.literature.uuid.uuid4")
 def test_update_authors_signature_blocks_discards_empty_signature_blocks(
-    mock_uuid4, base_app, db, es_clear, redis
+    mock_uuid4, app_clear, redis
 ):
     mock_uuid4.return_value = UUID("727238f3-8ed6-40b6-97d2-dc3cd1429131")
     author_data = {"authors": [{"full_name": "ae"}]}
@@ -1171,7 +1169,7 @@ def test_update_authors_signature_blocks_discards_empty_signature_blocks(
 
 @mock.patch("inspirehep.records.api.literature.uuid.uuid4")
 def test_update_authors_signature_discards_empty_signature_blocks(
-    mock_uuid4, base_app, db, es_clear, redis
+    mock_uuid4, app_clear, redis
 ):
     mock_uuid4.return_value = UUID("727238f3-8ed6-40b6-97d2-dc3cd1429131")
     author_data = {"authors": [{"full_name": "ae"}]}
@@ -1187,7 +1185,7 @@ def test_update_authors_signature_discards_empty_signature_blocks(
 
 @mock.patch("inspirehep.records.api.literature.uuid.uuid4")
 def test_updating_record_updates_authors_signature_blocks_and_uuids(
-    mock_uuid4, base_app, db, es_clear, redis
+    mock_uuid4, app_clear, redis
 ):
     mock_uuid4.return_value = UUID("727238f3-8ed6-40b6-97d2-dc3cd1429131")
     author_data = {"authors": [{"full_name": "Ellis, John Richard"}]}
@@ -1220,7 +1218,7 @@ def test_updating_record_updates_authors_signature_blocks_and_uuids(
 
 @mock.patch("inspirehep.records.api.literature.uuid.uuid4")
 def test_update_authors_uuids_does_not_update_existing_uuids(
-    mock_uuid4, base_app, db, es_clear, redis
+    mock_uuid4, app_clear, redis
 ):
     mock_uuid4.return_value = UUID("727238f3-8ed6-40b6-97d2-dc3cd1429131")
     author_data = {
@@ -1245,14 +1243,14 @@ def test_update_authors_uuids_does_not_update_existing_uuids(
     assert expected_result_create == record["authors"]
 
 
-def test_create_record_sends_phonetic_blocks_to_redis(base_app, db, es, redis):
+def test_create_record_sends_phonetic_blocks_to_redis(app, redis):
     author_data = {"authors": [{"full_name": "Ellis, John Richard"}]}
     data = faker.record("lit", data=author_data)
     LiteratureRecord.create(data)
     assert "ELj" == redis.zpopmin("author_phonetic_blocks")[0][0]
 
 
-def test_update_record_sends_phonetic_blocks_to_redis(base_app, db, es, redis):
+def test_update_record_sends_phonetic_blocks_to_redis(app, redis):
     data = faker.record("lit")
     record = LiteratureRecord.create(data)
     author_data_updated = {"authors": [{"full_name": "Ellis, John Richard"}]}
@@ -1261,9 +1259,7 @@ def test_update_record_sends_phonetic_blocks_to_redis(base_app, db, es, redis):
     assert "ELj" == redis.zpopmin("author_phonetic_blocks")[0][0]
 
 
-def test_phonetic_blocks_keep_order_in_redis_based_on_timestamp(
-    base_app, db, es, redis
-):
+def test_phonetic_blocks_keep_order_in_redis_based_on_timestamp(app, redis):
     with freeze_time(datetime.datetime(2015, 8, 18, 8, 51, 50)):
         author_data = {"authors": [{"full_name": "Ellis, John Richard"}]}
         data = faker.record("lit", data=author_data)
@@ -1278,7 +1274,7 @@ def test_phonetic_blocks_keep_order_in_redis_based_on_timestamp(
 
 
 def test_phonetic_blocks_not_updated_when_record_does_not_have_lit_collection(
-    base_app, db, es, redis
+    app, redis
 ):
     data = {
         "_collections": ["CDS Hidden"],

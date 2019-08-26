@@ -492,7 +492,7 @@ def test_external_identifiers(api_client, db, es, create_record, datadir):
     assert converter.added_external_identifiers == expected
 
 
-def test_bibtex_do_add_bibtex_citation(base_app, db, es, create_record, datadir):
+def test_bibtex_do_add_bibtex_citation(app, create_record, datadir):
     data = json.loads(
         (datadir / "test_orcid_converter_TestBibtexCitation.json").read_text()
     )
@@ -505,7 +505,7 @@ def test_bibtex_do_add_bibtex_citation(base_app, db, es, create_record, datadir)
     assert "citation" in top_level_tags
 
 
-def test_bibtext_do_not_add_bibtex_citation(base_app, db, es, create_record, datadir):
+def test_bibtext_do_not_add_bibtex_citation(app, create_record, datadir):
     data = json.loads(
         (datadir / "test_orcid_converter_TestBibtexCitation.json").read_text()
     )
