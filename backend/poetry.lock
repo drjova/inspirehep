@@ -894,7 +894,7 @@ Sickle = ">=0.6.2,<1.0"
 Twisted = ">=18.9.0,<19.0"
 amqp = ">2.2.0,<2.3.0 || >2.3.0,<3.0"
 autosemver = ">=0.2,<1.0"
-celery = ">=4.1,<4.3.0"
+celery = ">=4.2,<5.0"
 ftputil = ">=3.3.1"
 furl = ">=0.4.95"
 harvestingkit = ">=0.6.12"
@@ -1494,6 +1494,23 @@ idna = ">=2.5,<2.8"
 urllib3 = ">=1.21.1,<1.25"
 
 [[package]]
+category = "main"
+description = "XRootD file storage support for Invenio."
+name = "invenio-xrootd"
+optional = true
+python-versions = "*"
+version = "1.0.0a6"
+
+[package.dependencies]
+invenio-files-rest = ">=1.0.0a8"
+xrootdpyfs = ">=0.1.2"
+
+[package.source]
+reference = "d424a00b24916e801e3c731a3f4b744be8933c77"
+type = "git"
+url = "https://github.com/inveniosoftware/invenio-xrootd.git"
+
+[[package]]
 category = "dev"
 description = "IPython-enabled pdb"
 name = "ipdb"
@@ -1634,10 +1651,7 @@ python-versions = "*"
 version = "0.7.1"
 
 [package.dependencies]
-Unidecode = ">=0.4.19"
 dictdiffer = ">=0.6.0"
-editdistance = ">=0.3.1"
-munkres = ">=1.0.7"
 pyrsistent = ">=0.11.13"
 six = ">=1.10.0"
 
@@ -2159,7 +2173,7 @@ category = "main"
 description = "C parser in Python"
 name = "pycparser"
 optional = false
-python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+python-versions = "*"
 version = "2.19"
 
 [[package]]
@@ -2698,7 +2712,7 @@ category = "main"
 description = "Simple, fast, extensible JSON encoder/decoder for Python"
 name = "simplejson"
 optional = false
-python-versions = ">=2.5, !=3.0.*, !=3.1.*, !=3.2.*"
+python-versions = "*"
 version = "3.16.0"
 
 [[package]]
@@ -3065,6 +3079,30 @@ six = ">=1.4.1"
 validators = ">=0.5.0"
 
 [[package]]
+category = "main"
+description = "XRootD with Python bindings"
+name = "xrootd"
+optional = true
+python-versions = "*"
+version = "4.10.0"
+
+[[package]]
+category = "main"
+description = "XRootDPyFS is a PyFilesystem interface to XRootD."
+name = "xrootdpyfs"
+optional = true
+python-versions = "*"
+version = "0.1.6"
+
+[package.dependencies]
+fs = ">=0.4.0,<2.0"
+
+[package.source]
+reference = "f5525a45f0dfec2554c755534a4693c9738929f1"
+type = "git"
+url = "https://github.com/inspirehep/xrootdpyfs.git"
+
+[[package]]
 category = "dev"
 description = "Yet another URL library"
 marker = "python_version >= \"3.4\""
@@ -3099,8 +3137,11 @@ version = "4.6.0"
 [package.dependencies]
 setuptools = "*"
 
+[extras]
+xrootd = ["xrootd", "xrootdpyfs", "invenio-xrootd"]
+
 [metadata]
-content-hash = "580c0c1eb398e3e516b5bef483737622024fc5400c873ce63b80e4eb1fa97a9e"
+content-hash = "a70f7fca3169fda50703a4b5ca6ff3ac2341170d501ac50141be50c04ddc1293"
 python-versions = ">=3.6,<3.7"
 
 [metadata.hashes]
@@ -3224,6 +3265,7 @@ invenio-records-files = ["d198e3f0fa735069ab2823f5108141aa9afd713939244773f1c050
 invenio-records-rest = ["534eba23d788cf50258896f41efb859a5057d6658e29851fb47071d385ed4128", "d225db7788d1650ffcd7f13cf9923ff223877efb34d290e02f59233f902935b5"]
 invenio-rest = ["665cdc6d7f47b532e4823dc1a0a62de32e31caf387efc93aff7593a34124ee1d", "e5a73fcfc15c052840608950c0524447f1e86d24cc58a8fbf12a48a82f7e582a"]
 invenio-search = ["3db927a9a447bcfb8f84f4798a3bf656ab8ff6f093d8de83224bdde4518bf830", "b51d0af749fb08a6d8e46e8d7d2232e75462d87bb11a78aade33497ed1079773"]
+invenio-xrootd = []
 ipdb = ["473fdd798a099765f093231a8b1fabfa95b0b682fce12de0c74b61a4b4d8ee57"]
 ipython = ["c4ab005921641e40a68e405e286e7a1fcc464497e14d81b6914b4fd95e5dee9b", "dd76831f065f17bddd7eaa5c781f5ea32de5ef217592cf019e34043b56895aa1"]
 ipython-genutils = ["72dd37233799e619666c9f639a9da83c34013a73e8bbc79a7a6348d93c61fab8", "eb2e116e75ecef9d4d228fdc66af54269afa26ab4463042e33785b887c628ba8"]
@@ -3375,6 +3417,8 @@ wrapt = ["565a021fd19419476b9362b05eeaa094178de64f8361e44468f9e9d7843901e1"]
 wtforms = ["0cdbac3e7f6878086c334aa25dc5a33869a3954e9d1e015130d65a69309b3b61", "e3ee092c827582c50877cdbd49e9ce6d2c5c1f6561f849b3b068c1b8029626f1"]
 wtforms-alchemy = ["c491755380490c5c016f04e62949b22056f915160f54d0d1103c76b944c1c321"]
 wtforms-components = ["4a7751fc12dc4e4b2ef5700973296b5368094dcdf85c2808d2faff2c8e8f4caa"]
+xrootd = ["4399f1838777f606c7c487834190416c75b6435426d4385a3be8331a01ef069c"]
+xrootdpyfs = []
 yarl = ["024ecdc12bc02b321bc66b41327f930d1c2c543fa9a561b39861da9388ba7aa9", "2f3010703295fbe1aec51023740871e64bb9664c789cba5a6bdf404e93f7568f", "3890ab952d508523ef4881457c4099056546593fa05e93da84c7250516e632eb", "3e2724eb9af5dc41648e5bb304fcf4891adc33258c6e14e2a7414ea32541e320", "5badb97dd0abf26623a9982cd448ff12cb39b8e4c94032ccdedf22ce01a64842", "73f447d11b530d860ca1e6b582f947688286ad16ca42256413083d13f260b7a0", "7ab825726f2940c16d92aaec7d204cfc34ac26c0040da727cf8ba87255a33829", "b25de84a8c20540531526dfbb0e2d2b648c13fd5dd126728c496d7c3fea33310", "c6e341f5a6562af74ba55205dbd56d248daf1b5748ec48a0200ba227bb9e33f4", "c9bb7c249c4432cd47e75af3864bc02d26c9594f49c82e2a28624417f0ae63b8", "e060906c0c585565c718d1c3841747b61c5439af2211e185f6739a9412dfbde1"]
 zipp = ["3718b1cbcd963c7d4c5511a8240812904164b7f381b647143a89d3b98f9bcd8e", "f06903e9f1f43b12d371004b4ac7b06ab39a44adc747266928ae6debfa7b3335"]
 "zope.interface" = ["086707e0f413ff8800d9c4bc26e174f7ee4c9c8b0302fbad68d083071822316c", "1157b1ec2a1f5bf45668421e3955c60c610e31913cc695b407a574efdbae1f7b", "11ebddf765bff3bbe8dbce10c86884d87f90ed66ee410a7e6c392086e2c63d02", "14b242d53f6f35c2d07aa2c0e13ccb710392bcd203e1b82a1828d216f6f6b11f", "1b3d0dcabc7c90b470e59e38a9acaa361be43b3a6ea644c0063951964717f0e5", "20a12ab46a7e72b89ce0671e7d7a6c3c1ca2c2766ac98112f78c5bddaa6e4375", "298f82c0ab1b182bd1f34f347ea97dde0fffb9ecf850ecf7f8904b8442a07487", "2f6175722da6f23dbfc76c26c241b67b020e1e83ec7fe93c9e5d3dd18667ada2", "3b877de633a0f6d81b600624ff9137312d8b1d0f517064dfc39999352ab659f0", "4265681e77f5ac5bac0905812b828c9fe1ce80c6f3e3f8574acfb5643aeabc5b", "550695c4e7313555549aa1cdb978dc9413d61307531f123558e438871a883d63", "5f4d42baed3a14c290a078e2696c5f565501abde1b2f3f1a1c0a94fbf6fbcc39", "62dd71dbed8cc6a18379700701d959307823b3b2451bdc018594c48956ace745", "7040547e5b882349c0a2cc9b50674b1745db551f330746af434aad4f09fba2cc", "7e099fde2cce8b29434684f82977db4e24f0efa8b0508179fce1602d103296a2", "7e5c9a5012b2b33e87980cee7d1c82412b2ebabcb5862d53413ba1a2cfde23aa", "81295629128f929e73be4ccfdd943a0906e5fe3cdb0d43ff1e5144d16fbb52b1", "95cc574b0b83b85be9917d37cd2fad0ce5a0d21b024e1a5804d044aabea636fc", "968d5c5702da15c5bf8e4a6e4b67a4d92164e334e9c0b6acf080106678230b98", "9e998ba87df77a85c7bed53240a7257afe51a07ee6bc3445a0bf841886da0b97", "a0c39e2535a7e9c195af956610dba5a1073071d2d85e9d2e5d789463f63e52ab", "a15e75d284178afe529a536b0e8b28b7e107ef39626a7809b4ee64ff3abc9127", "a6a6ff82f5f9b9702478035d8f6fb6903885653bff7ec3a1e011edc9b1a7168d", "b639f72b95389620c1f881d94739c614d385406ab1d6926a9ffe1c8abbea23fe", "bad44274b151d46619a7567010f7cde23a908c6faa84b97598fd2f474a0c6891", "bbcef00d09a30948756c5968863316c949d9cedbc7aabac5e8f0ffbdb632e5f1", "d788a3999014ddf416f2dc454efa4a5dbeda657c6aba031cf363741273804c6b", "eed88ae03e1ef3a75a0e96a55a99d7937ed03e53d0cffc2451c208db445a2966", "f99451f3a579e73b5dd58b1b08d1179791d49084371d9a47baad3b22417f0317"]
