@@ -187,8 +187,12 @@ class FilesMixin:
         self.files.flush()
 
         data = {"key": key, "filename": filename, "url": self.get_file_url(key)}
+<<<<<<< HEAD
         original_url = url if not original_url else original_url
         if not self.local_url(original_url):
+=======
+        if original_url and not self.local_url(original_url):
+>>>>>>> records: do not add original_url if it is a local url
             data["original_url"] = original_url
         return data
 
