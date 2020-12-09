@@ -112,3 +112,13 @@ services:
       service: flower
     ports:
       - "5555:5555"
+  inspire-rdm:
+    build:
+      context: inspire-rdm
+    ports:
+      - "4000:4000"
+    command: npm start
+    healthcheck:
+      timeout: 5s
+      interval: 5s
+      retries: 5
