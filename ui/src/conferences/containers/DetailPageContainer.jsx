@@ -1,24 +1,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Map } from 'immutable';
-// import { gql } from "apollo-boost";
-// import {useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
+import gql from 'graphql-tag';
 
 import { Row, Col } from 'antd';
 import DocumentHead from '../../common/components/DocumentHead';
 import ConferenceDates from '../components/ConferenceDates';
 import fetchConference from '../../actions/conferences';
-import InspireCategoryList from '../components/InspireCategoryList';
 import ContentBox from '../../common/components/ContentBox';
 import RichDescription from '../../common/components/RichDescription';
 import EventSeries from '../../common/components/EventSeries';
-import ContactList from '../../common/components/ContactList';
-import PublicNotesList from '../../common/components/PublicNotesList';
-import KeywordList from '../../common/components/KeywordList';
-import EditRecordAction from '../../common/components/EditRecordAction.tsx';
-import ProceedingsAction from '../components/ProceedingsAction';
-import AddressList from '../../common/components/AddressList';
 import ConferenceContributions from '../components/ConferenceContributions';
 import { newSearch } from '../../actions/search';
 import { CONFERENCE_CONTRIBUTIONS_NS } from '../../search/constants';
@@ -27,69 +21,120 @@ import { makeCompliantMetaDescription } from '../../common/utils';
 import withRouteActionsDispatcher from '../../common/withRouteActionsDispatcher';
 import EventTitle from '../../common/components/EventTitle';
 import { CONFERENCES_PID_TYPE } from '../../common/constants';
-import UrlsAction from '../../literature/components/UrlsAction';
 
+const GET_CONFERENCE = gql`
+  query GetConference($control_number: String!) {
+    conference(control_number: $control_number) {
+      control_number
+      acronym
+      opening_date
+      closing_date
+      proceedings {
+        publication_info {
+          journal_title
+        }
+      }
+      adresses {
+        cities
+        country
+        country_code
+        latitude
+        longitude
+      }
+      cnum
+      short_description {
+        value
+      }
+      inspire_categories {
+        term
+      }
+      series {
+        name
+      }
+      contact_details {
+        email
+        name
+      }
+      proceedings {
+        publication_info {
+          artid
+          journal_issue
+          journal_title
+          journal_volume
+          material
+          page_start
+          page_end
+          pubinfo_freetext
+          year
+        }
+        source
+      }
+      public_notes {
+        value
+      }
+      keywords {
+        value
+      }
+      urls {
+        value
+      }
+      can_edit
+      deleted
+      titles {
+        title
+      }
+    }
+  }
+`;
 
-// const GET_POST = gql`
-//   subscription GetConference($id: uuid!) {
-//     posts(where: { id: { _eq: $id } }) {
-//       id
-//       body
-//       title
-//       createdAt
-//     }
-//   }
-// `;
+function DetailPage() {
+  const location = useLocation();
+  const recid = location.pathname
+    .split('/')
+    .pop()
+    .toString();
 
-function DetailPage({ record }) {
-  const metadata = record.get('metadata');
-  const controlNumber = metadata.get('control_number');
-  const title = metadata.getIn(['titles', 0]);
-  const acronym = metadata.getIn(['acronyms', 0]);
-  const openingDate = metadata.get('opening_date');
-  const closingDate = metadata.get('closing_date');
-  const addresses = metadata.get('addresses');
-  const cnum = metadata.get('cnum');
-  const description = metadata.getIn(['short_description', 'value']);
-  const inspireCategories = metadata.get('inspire_categories');
-  const series = metadata.get('series');
-  const contacts = metadata.get('contact_details');
-  const publicNotes = metadata.get('public_notes');
-  const keywords = metadata.get('keywords');
-  const urls = metadata.get('urls');
-  const proceedings = metadata.get('proceedings');
-  const canEdit = metadata.get('can_edit', false);
-  const deleted = metadata.get('deleted', false);
+  const { data, loading, error } = useQuery(GET_CONFERENCE, {
+    variables: { control_number: recid },
+    fetchPolicy: 'network-only',
+  });
+
+  if (loading) return null;
+  if (error) return `Error, ${error}`;
+
+  const { conference } = data;
+  const conferenceMap = new Map(Object.entries(conference));
+
+  const controlNumber = conferenceMap.get('control_number');
+  const title = conferenceMap.getIn(['titles', 0]);
+  const acronym = conferenceMap.getIn(['acronyms', 0]);
+  const openingDate = conferenceMap.get('opening_date');
+  const closingDate = conferenceMap.get('closing_date');
+  const cnum = conferenceMap.get('cnum');
+  const description = conferenceMap.getIn(['short_description', 'value']);
+  const series = conferenceMap.get('series');
+  const deleted = conferenceMap.get('deleted', false);
+  const titleMap = title ? new Map(Object.entries(title)) : title;
+  const acronymMap = acronym ? new Map(Object.entries(acronym[0])) : acronym;
 
   const metaDescription = makeCompliantMetaDescription(description);
 
   return (
     <>
-      <DocumentHead title={title.get('title')} description={metaDescription} />
+      <DocumentHead
+        title={titleMap.get('title')}
+        description={metaDescription}
+      />
       <Row type="flex" justify="center">
         <Col className="mv3" xs={24} md={22} lg={21} xxl={18}>
-          <ContentBox
-            className="sm-pb3"
-            leftActions={
-              <>
-                {urls && <UrlsAction urls={urls} />}
-                {proceedings && <ProceedingsAction proceedings={proceedings} />}
-                {canEdit && (
-                  <EditRecordAction
-                    pidType="conferences"
-                    pidValue={controlNumber}
-                  />
-                )}
-              </>
-            }
-          >
+          <ContentBox className="sm-pb3">
             <Row>
               <Col span={24}>{deleted && <DeletedAlert />}</Col>
             </Row>
             <Row>
               <Col>
                 <h2>
-                  <EventTitle title={title} acronym={acronym} />
+                  <EventTitle title={titleMap} acronym={acronymMap} />
                 </h2>
               </Col>
             </Row>
@@ -99,25 +144,9 @@ function DetailPage({ record }) {
                   openingDate={openingDate}
                   closingDate={closingDate}
                 />
-                {addresses && (
-                  <>
-                    {'. '}
-                    <AddressList addresses={addresses} />
-                  </>
-                )}
                 {cnum && ` (${cnum})`}
               </Col>
             </Row>
-            {inspireCategories && (
-              <Row className="mt2">
-                <Col>
-                  <InspireCategoryList
-                    categories={inspireCategories}
-                    wrapperClassName="di"
-                  />
-                </Col>
-              </Row>
-            )}
             {description && (
               <Row className="mt3">
                 <Col>
@@ -129,27 +158,6 @@ function DetailPage({ record }) {
               <Row className="mt3">
                 <Col>
                   <EventSeries series={series} pidType={CONFERENCES_PID_TYPE} />
-                </Col>
-              </Row>
-            )}
-            {contacts && (
-              <Row className="mt2">
-                <Col>
-                  <ContactList contacts={contacts} />
-                </Col>
-              </Row>
-            )}
-            {publicNotes && (
-              <Row className="mt2">
-                <Col>
-                  <PublicNotesList publicNotes={publicNotes} />
-                </Col>
-              </Row>
-            )}
-            {keywords && (
-              <Row className="mt2">
-                <Col>
-                  <KeywordList keywords={keywords} />
                 </Col>
               </Row>
             )}

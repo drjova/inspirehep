@@ -1,19 +1,21 @@
-import ApolloClient from "apollo-client";
-import { WebSocketLink } from "apollo-link-ws";
-import { InMemoryCache } from "apollo-cache-inmemory";
+import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
+
+const httpLink = createHttpLink({
+  uri: 'http://localhost:4000/graphql',
+});
+
+const authLink = setContext((_, { headers }) => {
+  const token = localStorage.getItem('token');
+  return {
+    headers: {
+      ...headers,
+    },
+  };
+});
 
 const client = new ApolloClient({
-  link: new WebSocketLink({
-    uri: "wss://your-graphql-endpoint.com/v1/graphql",
-    options: {
-      reconnect: true,
-      connectionParams: {
-        headers: {
-          Authorization: "Bearer yourauthtoken",
-        },
-      },
-    },
-  }),
+  link: authLink.concat(httpLink),
   cache: new InMemoryCache(),
 });
 

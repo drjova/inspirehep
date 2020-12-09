@@ -53,7 +53,7 @@ const conferencesSchema = gql`
   }
 
   type Conference {
-    control_number: Int!
+    control_number: String!
     titles: [Titles!]
     acronym: [String]
     opening_date: String
@@ -73,7 +73,7 @@ const conferencesSchema = gql`
   }
 
   type Query {
-    conference(control_number: Int): Conference
+    conference(control_number: String): Conference
   }
 `;
 
