@@ -92,10 +92,37 @@ class LiteratureRecord(
         return date
 
     @classmethod
-    def create(cls, data, disable_orcid_push=False, *args, **kwargs):
+    def create(
+        cls,
+        data,
+        disable_orcid_push=False,
+        disable_relations_update=False,
+        *args,
+        **kwargs,
+    ):
+        LiteratureRecord.update_authors_signature_blocks_and_uuids(data)
+        LiteratureRecord.update_refs_to_conferences(data)
+
         with db.session.begin_nested():
             record = super().create(data, **kwargs)
-            record.update(dict(record), disable_orcid_push=disable_orcid_push, **kwargs)
+
+            record.update_authors_records_table()
+            if not disable_relations_update:
+                record.update_conference_paper_and_proccedings()
+                record.update_institution_relations()
+                record.update_experiment_relations()
+
+            if disable_orcid_push:
+                LOGGER.info(
+                    "Record ORCID PUSH disabled",
+                    recid=record.get("control_number"),
+                    uuid=str(record.id),
+                )
+            else:
+                push_to_orcid(record)
+            record.push_authors_phonetic_blocks_to_redis()
+
+            # record.update(dict(record), disable_orcid_push=disable_orcid_push, **kwargs)
             return record
 
     @classmethod
@@ -157,13 +184,25 @@ class LiteratureRecord(
                 continue
             conference["conference_record"] = get_ref_from_pid("con", pid)
 
-    def update(self, data, disable_orcid_push=False, *args, **kwargs):
+    def update(
+        self,
+        data,
+        disable_orcid_push=False,
+        disable_relations_update=False,
+        *args,
+        **kwargs,
+    ):
         with db.session.begin_nested():
             LiteratureRecord.update_authors_signature_blocks_and_uuids(data)
             LiteratureRecord.update_refs_to_conferences(data)
-
             data = self.add_files(data)
             super().update(data, *args, **kwargs)
+
+            self.update_authors_records_table()
+            if not disable_relations_update:
+                self.update_conference_paper_and_proccedings()
+                self.update_institution_relations()
+                self.update_experiment_relations()
 
             if disable_orcid_push:
                 LOGGER.info(

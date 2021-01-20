@@ -67,7 +67,7 @@ class InspireRecord(Record):
 
     @classmethod
     def get_uuid_from_pid_value(cls, pid_value, pid_type=None, original_record=False):
-        """Get uuid for provided PID value
+        """Get uuid for provided PID value.
 
         Args:
             pid_value(str): pid value to query
@@ -76,7 +76,6 @@ class InspireRecord(Record):
               redirected record uuid (if False) or original record uuid (if True)
 
         Returns: requested record uuid
-
         """
         if not pid_type:
             pid_type = cls.pid_type
@@ -87,7 +86,7 @@ class InspireRecord(Record):
 
     @classmethod
     def get_record_by_pid_value(cls, pid_value, pid_type=None, original_record=False):
-        """Get record by provided PID value
+        """Get record by provided PID value.
 
         Args:
             pid_value(str): pid value to query
@@ -96,7 +95,6 @@ class InspireRecord(Record):
               redirected record (if False) or original record (if True)
 
         Returns: requested record
-
         """
         if not pid_type:
             pid_type = cls.pid_type
@@ -172,7 +170,7 @@ class InspireRecord(Record):
         return record_class
 
     @classmethod
-    def create(cls, data, id_=None, *args, **kwargs):
+    def create(cls, data, id_=None, _add_to_session=True, *args, **kwargs):
         record_class = cls.get_class_for_record(data)
         if record_class != cls:
             return record_class.create(data, *args, **kwargs)
@@ -185,10 +183,18 @@ class InspireRecord(Record):
                 deleted = data.get("deleted", False)
                 if not deleted:
                     cls.pidstore_handler.mint(id_, data)
+
             kwargs.pop("disable_orcid_push", None)
             kwargs.pop("disable_relations_update", None)
+
             data["self"] = get_ref_from_pid(cls.pid_type, data["control_number"])
-            record = super().create(data, id_=id_, **kwargs)
+
+            if not _add_to_session:
+                record = cls(data)
+                record.validate(**kwargs)
+                record.model = cls.model_cls(id=id_, json=record)
+            else:
+                record = super().create(data, id_=id_, **kwargs)
 
             if not record.get("deleted") and record.get("deleted_records"):
                 record.redirect_pids(record["deleted_records"])
