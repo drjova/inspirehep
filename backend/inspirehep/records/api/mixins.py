@@ -108,9 +108,15 @@ class PapersAuthorsExtensionMixin:
         self.delete_authors_records_table_entries()
         super().hard_delete()
 
-    def update(self, *args, **kwargs):
-        super().update(*args, **kwargs)
-        self.update_authors_records_table()
+    # @classmethod
+    # def create(cls, *args, **kwargs):
+    #     record = super().create(*args, **kwargs)
+    #     record.update_authors_records_table()
+    #     return record
+
+    # def update(self, *args, **kwargs):
+    #     super().update(*args, **kwargs)
+    #     self.update_authors_records_table()
 
 
 class CitationMixin(PapersAuthorsExtensionMixin):
@@ -332,17 +338,31 @@ class CitationMixin(PapersAuthorsExtensionMixin):
             )
         ).update({RecordCitations.is_self_citation: False}, synchronize_session=False)
 
-    def update(self, data, disable_relations_update=False, *args, **kwargs):
-        super().update(data, disable_relations_update, *args, **kwargs)
+    # @classmethod
+    # def create(cls, data, disable_relations_update=False, *args, **kwargs):
+    #     record = super().create(data, disable_relations_update, *args, **kwargs)
 
-        if disable_relations_update:
-            LOGGER.info(
-                "Record citation update disabled",
-                recid=self.get("control_number"),
-                uuid=str(self.id),
-            )
-        else:
-            self.update_refs_in_citation_table()
+    #     if disable_relations_update:
+    #         LOGGER.info(
+    #             "Record citation update disabled",
+    #             recid=record.get("control_number"),
+    #             uuid=str(record.id),
+    #         )
+    #     else:
+    #         record.update_refs_in_citation_table()
+    #         return record
+
+    # def update(self, data, disable_relations_update=False, *args, **kwargs):
+    #     super().update(data, disable_relations_update, *args, **kwargs)
+
+    #     if disable_relations_update:
+    #         LOGGER.info(
+    #             "Record citation update disabled",
+    #             recid=self.get("control_number"),
+    #             uuid=str(self.id),
+    #         )
+    #     else:
+    #         self.update_refs_in_citation_table()
 
     def get_all_connected_records_uuids_of_modified_authors(self):
         prev_version = self._previous_version
@@ -457,16 +477,29 @@ class ConferencePaperAndProceedingsMixin:
         self.clean_conference_literature_relation()
         super().hard_delete()
 
-    def update(self, data, disable_relations_update=False, *args, **kwargs):
-        super().update(data, disable_relations_update, *args, **kwargs)
-        if not disable_relations_update:
-            self.update_conference_paper_and_proccedings()
-        else:
-            LOGGER.info(
-                "Record conference papers and proceedings update disabled",
-                recid=self.get("control_number"),
-                uuid=str(self.id),
-            )
+    # @classmethod
+    # def create(cls, data, disable_relations_update=False, *args, **kwargs):
+    #     record = super().create(data, disable_relations_update, *args, **kwargs)
+    #     if not disable_relations_update:
+    #         record.update_conference_paper_and_proccedings()
+    #     else:
+    #         LOGGER.info(
+    #             "Record conference papers and proceedings update disabled",
+    #             recid=record.get("control_number"),
+    #             uuid=str(record.id),
+    #         )
+    #     return record
+
+    # def update(self, data, disable_relations_update=False, *args, **kwargs):
+    #     super().update(data, disable_relations_update, *args, **kwargs)
+    #     if not disable_relations_update:
+    #         self.update_conference_paper_and_proccedings()
+    #     else:
+    #         LOGGER.info(
+    #             "Record conference papers and proceedings update disabled",
+    #             recid=self.get("control_number"),
+    #             uuid=str(self.id),
+    #         )
 
     def get_newest_linked_conferences_uuid(self):
         """Returns referenced conferences for which perspective this record has changed"""
@@ -542,16 +575,30 @@ class InstitutionPapersMixin:
         self.clean_institution_literature_relations()
         super().hard_delete()
 
-    def update(self, data, disable_relations_update=False, *args, **kwargs):
-        super().update(data, disable_relations_update, *args, **kwargs)
-        if not disable_relations_update:
-            self.update_institution_relations()
-        else:
-            LOGGER.info(
-                "Record institution papers update disabled",
-                recid=self.get("control_number"),
-                uuid=str(self.id),
-            )
+    # @staticmethod
+    # def create(cls, data, disable_relations_update=False, *args, **kwargs):
+    #     record = super().create(data, disable_relations_update, *args, **kwargs)
+    #     if not disable_relations_update:
+    #         record.update_institution_relations()
+    #     else:
+    #         LOGGER.info(
+    #             "Record institution papers update disabled",
+    #             recid=record.get("control_number"),
+    #             uuid=str(record.id),
+    #         )
+    #     return record
+
+    # def update(self, data, disable_relations_update=False, *args, **kwargs):
+    #     super().update(data, disable_relations_update, *args, **kwargs)
+
+    #     if not disable_relations_update:
+    #         self.update_institution_relations()
+    #     else:
+    #         LOGGER.info(
+    #             "Record institution papers update disabled",
+    #             recid=self.get("control_number"),
+    #             uuid=str(self.id),
+    #         )
 
     def get_modified_institutions_uuids(self):
         prev_version = self._previous_version
@@ -609,16 +656,30 @@ class ExperimentPapersMixin:
         self.clean_experiment_literature_relations()
         super().hard_delete()
 
-    def update(self, data, disable_relations_update=False, *args, **kwargs):
-        super().update(data, disable_relations_update, *args, **kwargs)
-        if not disable_relations_update:
-            self.update_experiment_relations()
-        else:
-            LOGGER.info(
-                "Record experiment papers update disabled",
-                recid=self.get("control_number"),
-                uuid=str(self.id),
-            )
+    # @classmethod
+    # def create(cls, data, disable_relations_update=False, *args, **kwargs):
+    #     record = cls()
+    #     super().create(data, disable_relations_update, *args, **kwargs)
+    #     if not disable_relations_update:
+    #         record.update_experiment_relations()
+    #     else:
+    #         LOGGER.info(
+    #             "Record experiment papers update disabled",
+    #             recid=record.get("control_number"),
+    #             uuid=str(record.id),
+    #         )
+    #     return record
+
+    # def update(self, data, disable_relations_update=False, *args, **kwargs):
+    #     super().update(data, disable_relations_update, *args, **kwargs)
+    #     if not disable_relations_update:
+    #         self.update_experiment_relations()
+    #     else:
+    #         LOGGER.info(
+    #             "Record experiment papers update disabled",
+    #             recid=self.get("control_number"),
+    #             uuid=str(self.id),
+    #         )
 
     def get_modified_experiment_uuids(self):
         prev_version = self._previous_version
