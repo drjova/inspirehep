@@ -50,7 +50,8 @@ SearchPage.propTypes = {
 };
 
 const stateToProps = (state) => ({
-  assignView:
+  assignView: true,
+  assignView2:
     isSuperUser(state.user.getIn(['data', 'roles'])) ||
     (getConfigFor('ASSIGN_CONFERENCE_UI_FEATURE_FLAG') &&
       isCataloger(state.user.getIn(['data', 'roles']))),

@@ -30,6 +30,7 @@ import AssignAllActionContainer from '../../authors/containers/AssignAllActionCo
 import ToolActionContainer from './ToolActionContainer';
 import LiteratureSelectAllContainer from './LiteratureSelectAllContainer';
 import LiteratureSelectContainer from './LiteratureSelectContainer';
+import { clearLiteratureSelection } from '../../actions/literature';
 
 function LiteratureSearch({
   loading,
@@ -208,6 +209,7 @@ const stateToProps = (state, { namespace }) => ({
 
 const dispatchToProps = (dispatch) => ({
   onBaseQueriesChange(namespace, baseQueries) {
+    dispatch(clearLiteratureSelection());
     dispatch(searchBaseQueriesUpdate(namespace, baseQueries));
   },
 });
