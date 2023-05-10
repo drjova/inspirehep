@@ -5,8 +5,6 @@ on:
     types:
       - closed
 
-
-
 jobs:
   move_to_qa:
     runs-on: ubuntu-latest
