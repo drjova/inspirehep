@@ -2,8 +2,6 @@
 
 ## Pre requirements
 
-That's a test
-
 ### Python
 
 Python `3.8`
